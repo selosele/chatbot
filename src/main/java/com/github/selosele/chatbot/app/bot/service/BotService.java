@@ -1,11 +1,14 @@
 package com.github.selosele.chatbot.app.bot.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -31,18 +34,29 @@ public class BotService {
 
 	/**
 	 * 봇의 응답을 처리하는 메소드
-	 * @param input 사용자 입력
+	 * @param date 사용자 입력
 	 * @return 봇의 응답
 	 */
-	public BotResponseDTO getResponse(String[] input) {
+	public BotResponseDTO getResponse(String date) {
+
+		// date 값이 없는 경우 현재 날짜로 설정
+		if (date == null || date.isEmpty()) {
+			date = new SimpleDateFormat("yyyy-MM").format(new Date());
+		}
+		
+		String[] dateParts = date.split("-");
+		if (dateParts.length != 2) {
+    	throw new IllegalArgumentException("날짜 형식이 올바르지 않습니다. yyyy-MM 형식으로 입력해주세요.");
+    }
+
 		Map<String, Object> params = new HashMap<>(){
 			{
 				put("serviceKey", serviceKey);
-				put("solYear", input[0]);
-				put("solMonth", input[1]);
+				put("solYear", dateParts[0]);
+				put("solMonth", dateParts[1]);
 			}
 		};
-		String response = apiService.request(endpoint, params, "GET", "xml");
+		String response = apiService.request(endpoint, params, HttpMethod.GET.name(), "xml");
 
 		try {
 			JsonNode rootNode = objectMapper.readTree(response);
@@ -56,6 +70,8 @@ public class BotService {
 			List<Map<String, String>> list = new ArrayList<>();
 			JsonNode items = rootNode.path("body").path("items");
 			for (JsonNode item : items.path("item")) {
+				if (item.isMissingNode()) continue;
+				if (!item.has("dateName") || !item.has("isHoliday") || !item.has("locdate")) continue;
 				Map<String, String> map = new HashMap<>(){
 					{
 						put("dateName", item.get("dateName").asText());

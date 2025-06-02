@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -33,7 +34,7 @@ public class ApiService {
 	 * @return 응답 문자열
 	 */
 	public String request(String endpoint, Map<String, Object> data, String method, String returnType) {
-		if (method.equalsIgnoreCase("GET")) {
+		if (method.equalsIgnoreCase(HttpMethod.GET.name())) {
 			return requestForGet(endpoint, data, returnType);
 		}
 		throw new UnsupportedOperationException(Message.UNSUPPORTED_HTTP_METHOD.getMessage() + method);
@@ -66,7 +67,7 @@ public class ApiService {
 
 			URL url = new URL(urlBuilder.toString());
 			conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
+			conn.setRequestMethod(HttpMethod.GET.name());
 			conn.setRequestProperty("Content-type", "application/json");
 
 			int responseCode = conn.getResponseCode();
