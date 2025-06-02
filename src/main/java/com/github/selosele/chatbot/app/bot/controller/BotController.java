@@ -27,12 +27,12 @@ public class BotController {
 	@GetMapping(value = "/", produces = "application/json")
 	public ResponseEntity<BotResponseDTO.Response> getBotResponse(
 		HttpServletRequest request,
-		@RequestParam(required = false) String date) {
+		@RequestParam(value = "date", required = false) String input) {
 
 		var clientIP = GlobalUtil.getClientIP(request);
-		var respone = botService.getResponse(date);
+		var respone = botService.getResponse(input);
 
-		log.info("Client IP: {}, 입력 값: {}, 봇 응답: {}", clientIP, date, respone.toString());
+		log.info("Client IP: {}, Input: {}, Bot Response: {}", clientIP, input, respone.toString());
 		return ResponseEntity.ok(respone);
 	}
 

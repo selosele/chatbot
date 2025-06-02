@@ -36,17 +36,17 @@ public class BotService {
 
 	/**
 	 * 봇의 응답을 처리하는 메소드
-	 * @param date 사용자 입력
+	 * @param input 사용자 입력
 	 * @return 봇의 응답
 	 */
-	public BotResponseDTO.Response getResponse(String date) {
+	public BotResponseDTO.Response getResponse(String input) {
 
-		// date 값이 없는 경우 현재 날짜로 설정
-		if (date == null || date.isEmpty()) {
-			date = new SimpleDateFormat("yyyy-MM").format(new Date());
+		// 날짜 값이 없는 경우 현재 날짜로 설정
+		if (input == null || input.isEmpty()) {
+			input = new SimpleDateFormat("yyyy-MM").format(new Date());
 		}
 		
-		String[] dateParts = date.split("-");
+		String[] dateParts = input.split("-");
 		if (dateParts.length != 2) {
 			String message = "날짜 형식이 올바르지 않습니다. yyyy-MM 형식으로 입력해주세요.";
 			log.error(message);
