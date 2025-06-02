@@ -93,7 +93,7 @@ public class ApiService {
 		}
 		catch (IOException ex) {
 			ex.printStackTrace();
-			throw new RuntimeException(Message.REQUEST_FOR_GET_ERROR.getMessage(), ex);
+			throw new RuntimeException(HttpMethod.GET.name() + Message.REQUEST_ERROR.getMessage(), ex);
 		}
 		finally {
 			try { if (rd != null) rd.close(); } catch (IOException ignored) {}

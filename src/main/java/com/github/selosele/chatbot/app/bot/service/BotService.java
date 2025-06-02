@@ -66,10 +66,11 @@ public class BotService {
 			}
 
 			List<BotResponseDTO.Data> list = new ArrayList<>();
-			JsonNode items = rootNode.path("body").path("items");
+			JsonNode body = rootNode.path("body");
+			JsonNode totalCount = body.path("totalCount");
+			JsonNode items = body.path("items");
 			for (JsonNode item : items.path("item")) {
-				if (item.isMissingNode()) continue;
-				if (!item.has("dateName") || !item.has("isHoliday") || !item.has("locdate")) continue;
+				if (item.isMissingNode() || item.isEmpty()) continue;
 
 				list.add(BotResponseDTO.Data.builder()
 					.dateName(item.get("dateName").asText())
@@ -80,6 +81,7 @@ public class BotService {
 
 			return BotResponseDTO.Response.builder()
 				.data(list)
+				.message(totalCount.asText() + Message.FOUND_DATA_COUNT.getMessage())
 				.build();
 		}
 		catch (Exception ex) {
