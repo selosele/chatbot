@@ -29,7 +29,7 @@ public class BotService {
 	@Value("${api.serviceKey}")
 	private String serviceKey;
 
-	private final ApiService apiService;
+	private final ApiService api;
 	private final ObjectMapper objectMapper;
 
 	/**
@@ -49,14 +49,12 @@ public class BotService {
     	throw new IllegalArgumentException("날짜 형식이 올바르지 않습니다. yyyy-MM 형식으로 입력해주세요.");
     }
 
-		Map<String, Object> params = new HashMap<>(){
-			{
-				put("serviceKey", serviceKey);
-				put("solYear", dateParts[0]);
-				put("solMonth", dateParts[1]);
-			}
-		};
-		String response = apiService.request(endpoint, params, HttpMethod.GET.name(), "xml");
+		Map<String, Object> params = new HashMap<>();
+		params.put("serviceKey", serviceKey);
+		params.put("solYear", dateParts[0]);
+		params.put("solMonth", dateParts[1]);
+
+		String response = api.request(endpoint, params, HttpMethod.GET.name(), "xml");
 
 		try {
 			JsonNode rootNode = objectMapper.readTree(response);
@@ -72,13 +70,11 @@ public class BotService {
 			for (JsonNode item : items.path("item")) {
 				if (item.isMissingNode()) continue;
 				if (!item.has("dateName") || !item.has("isHoliday") || !item.has("locdate")) continue;
-				Map<String, String> map = new HashMap<>(){
-					{
-						put("dateName", item.get("dateName").asText());
-						put("isHoliday", item.get("isHoliday").asText());
-						put("locdate", item.get("locdate").asText());
-					}
-				};
+				
+				Map<String, String> map = new HashMap<>();
+				map.put("dateName", item.get("dateName").asText());
+				map.put("isHoliday", item.get("isHoliday").asText());
+				map.put("locdate", item.get("locdate").asText());
 				list.add(map);
 			}
 
