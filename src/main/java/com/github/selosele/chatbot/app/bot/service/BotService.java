@@ -40,7 +40,7 @@ public class BotService {
 	 * @param input 사용자 입력
 	 * @return 봇의 응답
 	 */
-	public BotResponseDTO.Response getResponse(String input) {
+	public BotResponseDTO.Response<?> getResponse(String input) {
 		if (!isValidInput(input)) {
 			log.error(Message.IS_INPUT_BLANK.getMessage());
 			return BotResponseDTO.Response.builder()
@@ -73,7 +73,7 @@ public class BotService {
 	 * @param input 사용자 입력 (공휴일/yyyy/MM 형식)
 	 * @return 공휴일 정보
 	 */
-	private BotResponseDTO.Response getHolidayResponse(String input) {
+	private BotResponseDTO.Response<BotResponseDTO.HolidayData> getHolidayResponse(String input) {
 
 		// 입력 값 예시) 공휴일/2025/06
 		String[] parts = {
@@ -90,7 +90,7 @@ public class BotService {
 		if (parts.length < 3 || !parts[1].matches("\\d{4}") || !parts[2].matches("\\d{2}")) {
 			String message = "날짜 형식이 올바르지 않습니다. yyyy/MM 형식으로 입력해주세요.";
 			log.error(message);
-    	return BotResponseDTO.Response.builder()
+    	return BotResponseDTO.Response.<BotResponseDTO.HolidayData>builder()
 				.message(message)
 				.build();
     }
@@ -107,33 +107,33 @@ public class BotService {
 			JsonNode resultCode = rootNode.path("header").path("resultCode");
 			if (!resultCode.asText().equals("00")) {
 				log.error("API 호출 실패: {}", resultCode.asText());
-				return BotResponseDTO.Response.builder()
+				return BotResponseDTO.Response.<BotResponseDTO.HolidayData>builder()
 					.message(Message.BOT_RESPONSE_ERROR.getMessage())
 					.build();
 			}
 
-			List<BotResponseDTO.Data> list = new ArrayList<>();
+			List<BotResponseDTO.HolidayData> list = new ArrayList<>();
 			JsonNode body = rootNode.path("body");
 			JsonNode totalCount = body.path("totalCount");
 			JsonNode items = body.path("items");
 			for (JsonNode item : items.path("item")) {
 				if (item.isMissingNode() || item.isEmpty()) continue;
 
-				list.add(BotResponseDTO.Data.builder()
+				list.add(BotResponseDTO.HolidayData.builder()
 					.dateName(item.get("dateName").asText())
 					.isHoliday(item.get("isHoliday").asText())
 					.locdate(item.get("locdate").asText())
 					.build());
 			}
 
-			return BotResponseDTO.Response.builder()
+			return BotResponseDTO.Response.<BotResponseDTO.HolidayData>builder()
 				.data(list)
 				.message(totalCount.asText() + Message.FOUND_DATA_COUNT.getMessage())
 				.build();
 		}
 		catch (Exception ex) {
 			log.error("API 응답 처리 중 오류 발생: {}", ex.getMessage());
-			return BotResponseDTO.Response.builder()
+			return BotResponseDTO.Response.<BotResponseDTO.HolidayData>builder()
 				.message(Message.BOT_RESPONSE_ERROR.getMessage())
 				.build();
 		}

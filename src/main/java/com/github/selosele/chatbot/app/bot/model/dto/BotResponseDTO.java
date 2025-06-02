@@ -11,20 +11,27 @@ import lombok.ToString;
  */
 public class BotResponseDTO {
 
+	/**
+	 * 봇의 응답을 위한 DTO
+	 */
 	@Getter
 	@Builder
 	@ToString
-	public static class Response {
-		private List<Data> data;
+	public static class Response<T> {
+		private List<T> data;
 		private String message;
 	}
 
+	/**
+	 * 공휴일 데이터 DTO
+	 */
 	@Getter
 	@Builder
 	@ToString
-	public static class Data {
+	public static class HolidayData {
 		private String dateName;
 		private String isHoliday;
 		private String locdate;
 	}
+	
 }

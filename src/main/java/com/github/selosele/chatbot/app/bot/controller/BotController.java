@@ -24,7 +24,7 @@ public class BotController {
 	 * @return 봇의 응답
 	 */
 	@GetMapping(value = "/", produces = "application/json")
-	public ResponseEntity<BotResponseDTO.Response> getBotResponse(
+	public ResponseEntity<BotResponseDTO.Response<?>> getBotResponse(
 		@ClientIP String clientIP,
 		@RequestParam(required = false) String input) {
 
