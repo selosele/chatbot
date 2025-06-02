@@ -32,4 +32,23 @@ public class GlobalUtil {
 
     return ip;
   }
+
+  /**
+   * 문자열이 비어있거나 null인지 확인하는 메소드
+   * @param str
+   * @return 비어있거나 null이면 true, 그렇지 않으면 false
+   */
+  public static boolean isBlank(String str) {
+    return str == null || str.trim().isEmpty();
+  }
+
+  /**
+   * 문자열이 비어있지 않은지 확인하는 메소드
+   * @param str
+   * @return 비어있지 않으면 true, 그렇지 않으면 false
+   */
+  public static boolean isNotBlank(String str) {
+    return !isBlank(str);
+  }
+
 }

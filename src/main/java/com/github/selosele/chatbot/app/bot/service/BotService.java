@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.selosele.chatbot.app.bot.model.dto.BotResponseDTO;
 import com.github.selosele.chatbot.app.core.api.service.ApiService;
 import com.github.selosele.chatbot.app.core.constant.Message;
+import com.github.selosele.chatbot.app.core.util.GlobalUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ public class BotService {
 	public BotResponseDTO.Response getResponse(String input) {
 
 		// 날짜 값이 없는 경우 현재 날짜로 설정
-		if (input == null || input.isEmpty()) {
+		if (GlobalUtil.isBlank(input)) {
 			input = new SimpleDateFormat("yyyy-MM").format(new Date());
 		}
 		
