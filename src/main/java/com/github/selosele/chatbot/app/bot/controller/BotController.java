@@ -26,7 +26,7 @@ public class BotController {
 	@GetMapping(value = "/", produces = "application/json")
 	public ResponseEntity<BotResponseDTO.Response> getBotResponse(
 		@ClientIP String clientIP,
-		@RequestParam(value = "date", required = false) String input) {
+		@RequestParam(required = false) String input) {
 
 		var respone = botService.getResponse(input);
 		log.info("Client IP: {}, Input: {}, Bot Response: {}", clientIP, input, respone.toString());

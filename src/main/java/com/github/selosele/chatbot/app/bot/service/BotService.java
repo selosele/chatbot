@@ -41,23 +41,64 @@ public class BotService {
 	 * @return 봇의 응답
 	 */
 	public BotResponseDTO.Response getResponse(String input) {
+		if (!isValidInput(input)) {
+			log.error(Message.IS_INPUT_BLANK.getMessage());
+			return BotResponseDTO.Response.builder()
+				.message(Message.IS_INPUT_BLANK.getMessage())
+				.build();
+		}
 
-		// 날짜 값이 없는 경우 현재 날짜로 설정
-		if (GlobalUtil.isBlank(input)) {
-			input = new SimpleDateFormat("yyyy-MM").format(new Date());
+		String category = input.split("/")[0];
+		if (category.equals("공휴일")) {
+			return getHolidayResponse(input);
+		}
+		else if (category.equals("버스")) {
+			return BotResponseDTO.Response.builder()
+				.message("버스 API는 아직 구현되지 않았습니다.")
+				.build();
+		}
+		else if (category.equals("지하철")) {
+			return BotResponseDTO.Response.builder()
+				.message("지하철 API는 아직 구현되지 않았습니다.")
+				.build();
 		}
 		
-		String[] dateParts = input.split("-");
-		if (dateParts.length != 2) {
-			String message = "날짜 형식이 올바르지 않습니다. yyyy-MM 형식으로 입력해주세요.";
+		return BotResponseDTO.Response.builder()
+			.message(Message.UNSUPPORTED_COMMAND.getMessage())
+			.build();
+	}
+
+	/**
+	 * 공휴일 정보를 조회하는 메소드
+	 * @param input 사용자 입력 (공휴일/yyyy/MM 형식)
+	 * @return 공휴일 정보
+	 */
+	private BotResponseDTO.Response getHolidayResponse(String input) {
+
+		// 입력 값 예시) 공휴일/2025/06
+		String[] parts = {
+			input,
+			new SimpleDateFormat("yyyy").format(new Date()),
+			new SimpleDateFormat("MM").format(new Date())
+		};
+
+		if (input.split("/").length >= 3) {
+			parts = input.split("/");
+		}
+		
+		// 날짜 형식이 올바른지 확인
+		if (parts.length < 3 || !parts[1].matches("\\d{4}") || !parts[2].matches("\\d{2}")) {
+			String message = "날짜 형식이 올바르지 않습니다. yyyy/MM 형식으로 입력해주세요.";
 			log.error(message);
-    	throw new IllegalArgumentException(message);
+    	return BotResponseDTO.Response.builder()
+				.message(message)
+				.build();
     }
 
 		Map<String, Object> params = new HashMap<>();
 		params.put("serviceKey", serviceKey);
-		params.put("solYear", dateParts[0]);
-		params.put("solMonth", dateParts[1]);
+		params.put("solYear", parts[1]);
+		params.put("solMonth", parts[2]);
 
 		String response = api.request(endpoint, params, HttpMethod.GET.name(), "xml");
 
@@ -96,6 +137,15 @@ public class BotService {
 				.message(Message.BOT_RESPONSE_ERROR.getMessage())
 				.build();
 		}
+	}
+
+	/**
+	 * 입력 값이 유효한지 검사하는 메소드
+	 * @param input 사용자 입력
+	 * @return 유효성 검사 결과
+	 */
+	private boolean isValidInput(String input) {
+		return GlobalUtil.isNotBlank(input);
 	}
 
 }

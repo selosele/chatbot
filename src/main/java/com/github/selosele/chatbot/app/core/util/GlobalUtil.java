@@ -34,6 +34,28 @@ public class GlobalUtil {
   }
 
   /**
+   * 객체가 비어있는지 확인하는 메소드
+   * @param obj 확인할 객체
+   * @return 비어있으면 true, 그렇지 않으면 false
+   */
+  public static boolean isEmpty(Object obj) {
+    if (obj == null) return true;
+    if (obj instanceof String) return ((String) obj).trim().isEmpty();
+    if (obj instanceof Iterable) return !((Iterable<?>) obj).iterator().hasNext();
+    if (obj instanceof Object[]) return ((Object[]) obj).length == 0;
+    return false;
+  }
+
+  /**
+   * 객체가 비어있지 않은지 확인하는 메소드
+   * @param obj 확인할 객체
+   * @return 비어있지 않으면 true, 그렇지 않으면 false
+   */
+  public static boolean isNotEmpty(Object obj) {
+    return !isEmpty(obj);
+  }
+
+  /**
    * 문자열이 비어있거나 null인지 확인하는 메소드
    * @param str
    * @return 비어있거나 null이면 true, 그렇지 않으면 false
