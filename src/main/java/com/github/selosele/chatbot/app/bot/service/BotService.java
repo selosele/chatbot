@@ -54,12 +54,12 @@ public class BotService {
 		}
 		else if (category.equals("버스")) {
 			return BotResponseDTO.Response.builder()
-				.message("버스 API는 아직 구현되지 않았습니다.")
+				.message("버스 API는 준비 중입니다.")
 				.build();
 		}
 		else if (category.equals("지하철")) {
 			return BotResponseDTO.Response.builder()
-				.message("지하철 API는 아직 구현되지 않았습니다.")
+				.message("지하철 API는 준비 중입니다.")
 				.build();
 		}
 		
