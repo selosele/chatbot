@@ -21,8 +21,8 @@ public class BotController {
 	 * @return 봇의 응답
 	 */
 	@GetMapping(value = "/", produces = "application/json")
-	public ResponseEntity<BotResponseDTO> getBotResponse(@RequestParam(required = false) String date) {
-		BotResponseDTO respone = botService.getResponse(date);
+	public ResponseEntity<BotResponseDTO.Response> getBotResponse(@RequestParam(required = false) String date) {
+		var respone = botService.getResponse(date);
 		return ResponseEntity.ok(respone);
 	}
 

@@ -37,7 +37,7 @@ public class BotService {
 	 * @param date 사용자 입력
 	 * @return 봇의 응답
 	 */
-	public BotResponseDTO getResponse(String date) {
+	public BotResponseDTO.Response getResponse(String date) {
 
 		// date 값이 없는 경우 현재 날짜로 설정
 		if (date == null || date.isEmpty()) {
@@ -60,31 +60,31 @@ public class BotService {
 			JsonNode rootNode = objectMapper.readTree(response);
 			JsonNode resultCode = rootNode.path("header").path("resultCode");
 			if (!resultCode.asText().equals("00")) {
-				return BotResponseDTO.builder()
+				return BotResponseDTO.Response.builder()
 					.message(Message.BOT_RESPONSE_ERROR.getMessage())
 					.build();
 			}
 
-			List<Map<String, String>> list = new ArrayList<>();
+			List<BotResponseDTO.Data> list = new ArrayList<>();
 			JsonNode items = rootNode.path("body").path("items");
 			for (JsonNode item : items.path("item")) {
 				if (item.isMissingNode()) continue;
 				if (!item.has("dateName") || !item.has("isHoliday") || !item.has("locdate")) continue;
-				
-				Map<String, String> map = new HashMap<>();
-				map.put("dateName", item.get("dateName").asText());
-				map.put("isHoliday", item.get("isHoliday").asText());
-				map.put("locdate", item.get("locdate").asText());
-				list.add(map);
+
+				list.add(BotResponseDTO.Data.builder()
+					.dateName(item.get("dateName").asText())
+					.isHoliday(item.get("isHoliday").asText())
+					.locdate(item.get("locdate").asText())
+					.build());
 			}
 
-			return BotResponseDTO.builder()
+			return BotResponseDTO.Response.builder()
 				.data(list)
 				.build();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
-			return BotResponseDTO.builder()
+			return BotResponseDTO.Response.builder()
 				.message(Message.BOT_RESPONSE_ERROR.getMessage())
 				.build();
 		}
