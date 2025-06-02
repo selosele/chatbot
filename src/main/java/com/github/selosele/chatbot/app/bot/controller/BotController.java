@@ -7,9 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.selosele.chatbot.app.bot.model.dto.BotResponseDTO;
 import com.github.selosele.chatbot.app.bot.service.BotService;
+import com.github.selosele.chatbot.app.core.util.GlobalUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class BotController {
@@ -21,8 +25,14 @@ public class BotController {
 	 * @return 봇의 응답
 	 */
 	@GetMapping(value = "/", produces = "application/json")
-	public ResponseEntity<BotResponseDTO.Response> getBotResponse(@RequestParam(required = false) String date) {
+	public ResponseEntity<BotResponseDTO.Response> getBotResponse(
+		HttpServletRequest request,
+		@RequestParam(required = false) String date) {
+
+		var clientIP = GlobalUtil.getClientIP(request);
 		var respone = botService.getResponse(date);
+
+		log.info("Client IP: {}, 입력 값: {}, 봇 응답: {}", clientIP, date, respone.toString());
 		return ResponseEntity.ok(respone);
 	}
 

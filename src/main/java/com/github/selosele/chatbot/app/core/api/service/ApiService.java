@@ -17,7 +17,9 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.github.selosele.chatbot.app.core.constant.Message;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ApiService {
@@ -37,7 +39,10 @@ public class ApiService {
 		if (method.equalsIgnoreCase(HttpMethod.GET.name())) {
 			return requestForGet(endpoint, data, returnType);
 		}
-		throw new UnsupportedOperationException(Message.UNSUPPORTED_HTTP_METHOD.getMessage() + method);
+
+		String message = Message.UNSUPPORTED_HTTP_METHOD.getMessage() + method;
+		log.error(message);
+		throw new UnsupportedOperationException(message);
 	}
 
 	/**
@@ -92,8 +97,9 @@ public class ApiService {
 			return sb.toString();
 		}
 		catch (IOException ex) {
-			ex.printStackTrace();
-			throw new RuntimeException(HttpMethod.GET.name() + Message.REQUEST_ERROR.getMessage(), ex);
+			String message = HttpMethod.GET.name() + Message.REQUEST_ERROR.getMessage();
+			log.error(message, ex);
+			throw new RuntimeException(message, ex);
 		}
 		finally {
 			try { if (rd != null) rd.close(); } catch (IOException ignored) {}

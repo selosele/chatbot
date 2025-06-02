@@ -18,7 +18,9 @@ import com.github.selosele.chatbot.app.core.api.service.ApiService;
 import com.github.selosele.chatbot.app.core.constant.Message;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BotService {
@@ -46,7 +48,9 @@ public class BotService {
 		
 		String[] dateParts = date.split("-");
 		if (dateParts.length != 2) {
-    	throw new IllegalArgumentException("날짜 형식이 올바르지 않습니다. yyyy-MM 형식으로 입력해주세요.");
+			String message = "날짜 형식이 올바르지 않습니다. yyyy-MM 형식으로 입력해주세요.";
+			log.error(message);
+    	throw new IllegalArgumentException(message);
     }
 
 		Map<String, Object> params = new HashMap<>();
@@ -60,6 +64,7 @@ public class BotService {
 			JsonNode rootNode = objectMapper.readTree(response);
 			JsonNode resultCode = rootNode.path("header").path("resultCode");
 			if (!resultCode.asText().equals("00")) {
+				log.error("API 호출 실패: {}", resultCode.asText());
 				return BotResponseDTO.Response.builder()
 					.message(Message.BOT_RESPONSE_ERROR.getMessage())
 					.build();
@@ -85,7 +90,7 @@ public class BotService {
 				.build();
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("API 응답 처리 중 오류 발생: {}", ex.getMessage());
 			return BotResponseDTO.Response.builder()
 				.message(Message.BOT_RESPONSE_ERROR.getMessage())
 				.build();
