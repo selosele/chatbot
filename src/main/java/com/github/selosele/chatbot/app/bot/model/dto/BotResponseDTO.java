@@ -6,6 +6,9 @@ import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * 봇의 응답 DTO
+ */
 @Getter
 @Builder
 public class BotResponseDTO {

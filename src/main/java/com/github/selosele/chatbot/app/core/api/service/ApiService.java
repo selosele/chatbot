@@ -29,6 +29,7 @@ public class ApiService {
 	 * @param endpoint
 	 * @param data
 	 * @param method
+	 * @param returnType
 	 * @return 응답 문자열
 	 */
 	public String request(String endpoint, Map<String, Object> data, String method, String returnType) {
@@ -42,6 +43,7 @@ public class ApiService {
 	 * GET 요청을 처리하는 메소드
 	 * @param endpoint
 	 * @param data
+	 * @param returnType
 	 * @return 응답 문자열
 	 */
 	private String requestForGet(String endpoint, Map<String, Object> data, String returnType) {

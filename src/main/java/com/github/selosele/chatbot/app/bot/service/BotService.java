@@ -1,6 +1,7 @@
 package com.github.selosele.chatbot.app.bot.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class BotService {
 
 	@Value("${api.endpoint}")
-	private String endPoint;
+	private String endpoint;
 
 	@Value("${api.serviceKey}")
 	private String serviceKey;
@@ -34,11 +35,14 @@ public class BotService {
 	 * @return 봇의 응답
 	 */
 	public BotResponseDTO getResponse(String[] input) {
-		Map<String, Object> params = Map.of(
-			"serviceKey", serviceKey,
-			"solYear", input[0],
-			"solMonth", input[1]);
-		String response = apiService.request(endPoint, params, "GET", "xml");
+		Map<String, Object> params = new HashMap<>(){
+			{
+				put("serviceKey", serviceKey);
+				put("solYear", input[0]);
+				put("solMonth", input[1]);
+			}
+		};
+		String response = apiService.request(endpoint, params, "GET", "xml");
 
 		try {
 			JsonNode rootNode = objectMapper.readTree(response);
@@ -52,10 +56,13 @@ public class BotService {
 			List<Map<String, String>> list = new ArrayList<>();
 			JsonNode items = rootNode.path("body").path("items");
 			for (JsonNode item : items.path("item")) {
-				Map<String, String> map = Map.of(
-					"dateName", item.get("dateName").asText(),
-					"isHoliday", item.get("isHoliday").asText(),
-					"locdate", item.get("locdate").asText());
+				Map<String, String> map = new HashMap<>(){
+					{
+						put("dateName", item.get("dateName").asText());
+						put("isHoliday", item.get("isHoliday").asText());
+						put("locdate", item.get("locdate").asText());
+					}
+				};
 				list.add(map);
 			}
 
