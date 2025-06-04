@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.selosele.chatbot.app.bot.model.dto.BotRequestDTO;
 import com.github.selosele.chatbot.app.bot.model.dto.BotResponseDTO;
 import com.github.selosele.chatbot.app.bot.model.dto.BotResultDataDTO;
 import com.github.selosele.chatbot.app.core.api.service.ApiService;
@@ -41,11 +42,14 @@ public class BotService {
 	 * @param input 사용자 입력
 	 * @return 봇의 응답
 	 */
-	public BotResponseDTO.Response<?> getResponse(String input) {
+	public BotResponseDTO.Response<?> getResponse(BotRequestDTO botRequestDTO) {
+		String input = botRequestDTO.getAction().getParams().get("input");
+
 		if (!isValidInput(input)) {
 			log.error(Message.IS_INPUT_BLANK.getMessage());
 			return BotResponseDTO.Response.builder()
 				.message(Message.IS_INPUT_BLANK.getMessage())
+				.input(input)
 				.build();
 		}
 
@@ -56,16 +60,19 @@ public class BotService {
 		else if (category.equals("버스")) {
 			return BotResponseDTO.Response.builder()
 				.message("버스 API는 준비 중입니다.")
+				.input(input)
 				.build();
 		}
 		else if (category.equals("지하철")) {
 			return BotResponseDTO.Response.builder()
 				.message("지하철 API는 준비 중입니다.")
+				.input(input)
 				.build();
 		}
 		
 		return BotResponseDTO.Response.builder()
 			.message(Message.UNSUPPORTED_COMMAND.getMessage())
+			.input(input)
 			.build();
 	}
 
@@ -93,6 +100,7 @@ public class BotService {
 			log.error(message);
     	return BotResponseDTO.Response.<BotResultDataDTO.Holiday>builder()
 				.message(message)
+				.input(input)
 				.build();
     }
 
@@ -110,6 +118,7 @@ public class BotService {
 				log.error("API 호출 실패: {}", resultCode.asText());
 				return BotResponseDTO.Response.<BotResultDataDTO.Holiday>builder()
 					.message(Message.BOT_RESPONSE_ERROR.getMessage())
+					.input(input)
 					.build();
 			}
 
@@ -120,12 +129,14 @@ public class BotService {
 			return BotResponseDTO.Response.<BotResultDataDTO.Holiday>builder()
 				.data(parseHolidayItems(items))
 				.message(totalCount.asText("0") + Message.FOUND_DATA_COUNT.getMessage())
+				.input(input)
 				.build();
 		}
 		catch (Exception ex) {
 			log.error("API 응답 처리 중 오류 발생: {}", ex.getMessage());
 			return BotResponseDTO.Response.<BotResultDataDTO.Holiday>builder()
 				.message(Message.BOT_RESPONSE_ERROR.getMessage())
+				.input(input)
 				.build();
 		}
 	}

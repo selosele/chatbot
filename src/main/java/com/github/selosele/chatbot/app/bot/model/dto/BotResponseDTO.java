@@ -19,6 +19,7 @@ public class BotResponseDTO {
 	@ToString
 	public static class Response<T> {
 		private List<T> data;
+		private String input;
 		private String message;
 	}
 	
