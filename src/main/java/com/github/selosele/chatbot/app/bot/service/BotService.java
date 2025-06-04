@@ -43,7 +43,7 @@ public class BotService {
 	 * @return 봇의 응답
 	 */
 	public BotResponseDTO.Response<?> getResponse(BotRequestDTO botRequestDTO) {
-		String input = botRequestDTO.getAction().getParams().get("input");
+		String input = (String) botRequestDTO.getAction().getParams().get("input");
 
 		if (!isValidInput(input)) {
 			log.error(Message.IS_INPUT_BLANK.getMessage());
@@ -55,7 +55,8 @@ public class BotService {
 
 		String category = input.split("/")[0];
 		if (category.equals("공휴일")) {
-			return getHolidayResponse(input);
+			var response = getHolidayResponse(input);
+			return response;
 		}
 		else if (category.equals("버스")) {
 			return BotResponseDTO.Response.builder()

@@ -29,10 +29,10 @@ public class BotController {
 		@ClientIP String ip,
 		@RequestBody(required = false) BotRequestDTO botRequestDTO) {
 
-		var respone = botService.getResponse(botRequestDTO);
+		var response = botService.getResponse(botRequestDTO);
 
-		log.info("Client IP: {}, Bot Response: {}", ip, respone.toString());
-		return ResponseEntity.ok(respone);
+		log.info("Client IP: {}, Bot Response: {}", ip, response.toString());
+		return ResponseEntity.ok(response);
 	}
 
 }

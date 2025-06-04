@@ -2,12 +2,15 @@ package com.github.selosele.chatbot.app.bot.model.dto;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 
 /**
  * 봇의 요청 DTO
  */
 @Getter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BotRequestDTO {
 
 	private Intent intent;
@@ -19,12 +22,13 @@ public class BotRequestDTO {
 	public static class Intent {
 		private String id;
 		private String name;
+		private Map<String, Object> extra;
 	}
 
 	@Getter
 	public static class UserRequest {
 		private String timezone;
-		private Map<String, String> params;
+		private Map<String, Object> params;
 		private Block block;
 		private String utterance;
 		private String lang;
@@ -53,8 +57,8 @@ public class BotRequestDTO {
 	@Getter
 	public static class Action {
 		private String name;
-		private String clientExtra;
-		private Map<String, String> params;
+		private Map<String, Object> clientExtra;
+		private Map<String, Object> params;
 		private String id;
 		private Map<String, Input> detailParams;
 	}
