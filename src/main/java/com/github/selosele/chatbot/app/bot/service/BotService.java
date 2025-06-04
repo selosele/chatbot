@@ -113,36 +113,12 @@ public class BotService {
 					.build();
 			}
 
-			List<BotResultDataDTO.Holiday> list = new ArrayList<>();
 			JsonNode body = rootNode.path("body");
 			JsonNode totalCount = body.path("totalCount");
 			JsonNode items = body.path("items").path("item");
 
-			// items가 배열인지 객체인지 확인
-			if (items.isArray()) {
-				for (JsonNode item : items) {
-					if (item.isMissingNode() || item.isEmpty()) continue;
-
-					list.add(BotResultDataDTO.Holiday.builder()
-						.dateName(item.get("dateName").asText(""))
-						.isHoliday(item.get("isHoliday").asText(""))
-						.locdate(item.get("locdate").asText(""))
-						.build());
-				}
-			}
-			else if (items.isObject()) {
-				JsonNode item = items;
-				if (!item.isMissingNode() && !item.isEmpty()) {
-					list.add(BotResultDataDTO.Holiday.builder()
-						.dateName(item.path("dateName").asText(""))
-						.isHoliday(item.path("isHoliday").asText(""))
-						.locdate(item.path("locdate").asText(""))
-						.build());
-				}
-			}
-
 			return BotResponseDTO.Response.<BotResultDataDTO.Holiday>builder()
-				.data(list)
+				.data(parseHolidayItems(items))
 				.message(totalCount.asText("0") + Message.FOUND_DATA_COUNT.getMessage())
 				.build();
 		}
@@ -152,6 +128,39 @@ public class BotService {
 				.message(Message.BOT_RESPONSE_ERROR.getMessage())
 				.build();
 		}
+	}
+
+	/**
+	 * 공휴일 정보를 파싱하는 메소드
+	 * @param items JSON 노드
+	 * @return 공휴일 정보 리스트
+	 */
+	private List<BotResultDataDTO.Holiday> parseHolidayItems(JsonNode items) {
+		List<BotResultDataDTO.Holiday> list = new ArrayList<>();
+
+		// items가 배열인지 객체인지 확인
+		if (items.isArray()) {
+			for (JsonNode item : items) {
+				if (item.isMissingNode() || item.isEmpty()) continue;
+
+				list.add(BotResultDataDTO.Holiday.builder()
+					.dateName(item.get("dateName").asText(""))
+					.isHoliday(item.get("isHoliday").asText(""))
+					.locdate(item.get("locdate").asText(""))
+					.build());
+			}
+		}
+		else if (items.isObject()) {
+			JsonNode item = items;
+			if (!item.isMissingNode() && !item.isEmpty()) {
+				list.add(BotResultDataDTO.Holiday.builder()
+					.dateName(item.path("dateName").asText(""))
+					.isHoliday(item.path("isHoliday").asText(""))
+					.locdate(item.path("locdate").asText(""))
+					.build());
+			}
+		}
+		return list;
 	}
 
 	/**
