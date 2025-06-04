@@ -1,6 +1,8 @@
 package com.github.selosele.chatbot.app.bot.service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,17 +59,32 @@ public class BotService {
 
 		String category = input.split("/")[0];
 		if (category.equals("공휴일")) {
-			String text = "";
+			StringBuilder text = new StringBuilder();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 			var response = getHolidayResponse(input);
+
 			if (response.getData() != null && !response.getData().isEmpty()) {
 				for (var holiday : response.getData()) {
 					if (holiday.getIsHoliday().equals("Y")) {
-						// 예시) 20250606: 현충일
-						text += String.format("%s: %s\n", holiday.getLocdate(), holiday.getDateName());
+						// 날짜 문자열을 LocalDate로 변환
+						LocalDate date = LocalDate.parse(holiday.getLocdate(), formatter);
+						// 요일을 한글 요일로 변환 (예: 월, 화, 수, 목, 금, 토, 일)
+						String dayOfWeekKor = switch (date.getDayOfWeek()) {
+							case MONDAY -> "월";
+							case TUESDAY -> "화";
+							case WEDNESDAY -> "수";
+							case THURSDAY -> "목";
+							case FRIDAY -> "금";
+							case SATURDAY -> "토";
+							case SUNDAY -> "일";
+						};
+						
+						// 출력 예시: 20250606(금): 현충일
+						text.append(String.format("%s(%s): %s\n", holiday.getLocdate(), dayOfWeekKor, holiday.getDateName()));
 					}
 				}
 			} else {
-				text = Message.FOUND_NO_HOLIDAY_DATA.getMessage();
+				text.append(Message.FOUND_NO_HOLIDAY_DATA.getMessage());
 			}
 			
 			return SkillResponseDTO.builder()
@@ -75,7 +92,7 @@ public class BotService {
 					.outputs(List.of(
 						SkillResponseDTO.Output.builder()
 							.simpleText(SkillResponseDTO.SimpleText.builder()
-								.text(text)
+								.text(text.toString())
 								.build())
 							.build()
 					))
