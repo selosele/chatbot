@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.selosele.chatbot.app.bot.model.dto.BotResponseDTO;
+import com.github.selosele.chatbot.app.bot.model.dto.BotResultDataDTO;
 import com.github.selosele.chatbot.app.core.api.service.ApiService;
 import com.github.selosele.chatbot.app.core.constant.Message;
 import com.github.selosele.chatbot.app.core.util.GlobalUtil;
@@ -73,7 +74,7 @@ public class BotService {
 	 * @param input 사용자 입력 (공휴일/yyyy/MM 형식)
 	 * @return 공휴일 정보
 	 */
-	private BotResponseDTO.Response<BotResponseDTO.HolidayData> getHolidayResponse(String input) {
+	private BotResponseDTO.Response<BotResultDataDTO.Holiday> getHolidayResponse(String input) {
 
 		// 입력 값 예시) 공휴일/2025/06
 		String[] parts = {
@@ -90,7 +91,7 @@ public class BotService {
 		if (parts.length < 3 || !parts[1].matches("\\d{4}") || !parts[2].matches("\\d{2}")) {
 			String message = "날짜 형식이 올바르지 않습니다. yyyy/MM 형식으로 입력해주세요.";
 			log.error(message);
-    	return BotResponseDTO.Response.<BotResponseDTO.HolidayData>builder()
+    	return BotResponseDTO.Response.<BotResultDataDTO.Holiday>builder()
 				.message(message)
 				.build();
     }
@@ -107,33 +108,47 @@ public class BotService {
 			JsonNode resultCode = rootNode.path("header").path("resultCode");
 			if (!resultCode.asText().equals("00")) {
 				log.error("API 호출 실패: {}", resultCode.asText());
-				return BotResponseDTO.Response.<BotResponseDTO.HolidayData>builder()
+				return BotResponseDTO.Response.<BotResultDataDTO.Holiday>builder()
 					.message(Message.BOT_RESPONSE_ERROR.getMessage())
 					.build();
 			}
 
-			List<BotResponseDTO.HolidayData> list = new ArrayList<>();
+			List<BotResultDataDTO.Holiday> list = new ArrayList<>();
 			JsonNode body = rootNode.path("body");
 			JsonNode totalCount = body.path("totalCount");
-			JsonNode items = body.path("items");
-			for (JsonNode item : items.path("item")) {
-				if (item.isMissingNode() || item.isEmpty()) continue;
+			JsonNode items = body.path("items").path("item");
 
-				list.add(BotResponseDTO.HolidayData.builder()
-					.dateName(item.get("dateName").asText())
-					.isHoliday(item.get("isHoliday").asText())
-					.locdate(item.get("locdate").asText())
-					.build());
+			// items가 배열인지 객체인지 확인
+			if (items.isArray()) {
+				for (JsonNode item : items) {
+					if (item.isMissingNode() || item.isEmpty()) continue;
+
+					list.add(BotResultDataDTO.Holiday.builder()
+						.dateName(item.get("dateName").asText(""))
+						.isHoliday(item.get("isHoliday").asText(""))
+						.locdate(item.get("locdate").asText(""))
+						.build());
+				}
+			}
+			else if (items.isObject()) {
+				JsonNode item = items;
+				if (!item.isMissingNode() && !item.isEmpty()) {
+					list.add(BotResultDataDTO.Holiday.builder()
+						.dateName(item.path("dateName").asText(""))
+						.isHoliday(item.path("isHoliday").asText(""))
+						.locdate(item.path("locdate").asText(""))
+						.build());
+				}
 			}
 
-			return BotResponseDTO.Response.<BotResponseDTO.HolidayData>builder()
+			return BotResponseDTO.Response.<BotResultDataDTO.Holiday>builder()
 				.data(list)
-				.message(totalCount.asText() + Message.FOUND_DATA_COUNT.getMessage())
+				.message(totalCount.asText("0") + Message.FOUND_DATA_COUNT.getMessage())
 				.build();
 		}
 		catch (Exception ex) {
 			log.error("API 응답 처리 중 오류 발생: {}", ex.getMessage());
-			return BotResponseDTO.Response.<BotResponseDTO.HolidayData>builder()
+			return BotResponseDTO.Response.<BotResultDataDTO.Holiday>builder()
 				.message(Message.BOT_RESPONSE_ERROR.getMessage())
 				.build();
 		}

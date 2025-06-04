@@ -21,17 +21,5 @@ public class BotResponseDTO {
 		private List<T> data;
 		private String message;
 	}
-
-	/**
-	 * 공휴일 데이터 DTO
-	 */
-	@Getter
-	@Builder
-	@ToString
-	public static class HolidayData {
-		private String dateName;
-		private String isHoliday;
-		private String locdate;
-	}
 	
 }
