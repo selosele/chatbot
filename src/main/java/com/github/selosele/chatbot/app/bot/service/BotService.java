@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.selosele.chatbot.app.bot.model.dto.BotRequestDTO;
 import com.github.selosele.chatbot.app.bot.model.dto.BotResponseDTO;
 import com.github.selosele.chatbot.app.bot.model.dto.BotResultDataDTO;
+import com.github.selosele.chatbot.app.bot.model.dto.SkillResponseDTO;
 import com.github.selosele.chatbot.app.core.api.service.ApiService;
 import com.github.selosele.chatbot.app.core.constant.Message;
 import com.github.selosele.chatbot.app.core.util.GlobalUtil;
@@ -42,39 +43,65 @@ public class BotService {
 	 * @param input 사용자 입력
 	 * @return 봇의 응답
 	 */
-	public BotResponseDTO.Response<?> getResponse(BotRequestDTO botRequestDTO) {
-		String input = (String) botRequestDTO.getAction().getParams().get("input");
+	public SkillResponseDTO getResponse(BotRequestDTO botRequestDTO) {
+		String input = botRequestDTO.getUserRequest().getUtterance();
 
 		if (!isValidInput(input)) {
 			log.error(Message.IS_INPUT_BLANK.getMessage());
-			return BotResponseDTO.Response.builder()
-				.message(Message.IS_INPUT_BLANK.getMessage())
-				.input(input)
-				.build();
+			// return BotResponseDTO.Response.builder()
+			// 	.message(Message.IS_INPUT_BLANK.getMessage())
+			// 	.input(input)
+			// 	.build();
+			return null;
 		}
 
 		String category = input.split("/")[0];
 		if (category.equals("공휴일")) {
+			String text = "";
 			var response = getHolidayResponse(input);
-			return response;
+			if (response.getData() != null && !response.getData().isEmpty()) {
+				for (var holiday : response.getData()) {
+					if (holiday.getIsHoliday().equals("Y")) {
+						// 예시: 20250606: 현충일
+						text += String.format("%s: %s\n", holiday.getLocdate(), holiday.getDateName());
+					}
+				}
+			} else {
+				text = Message.FOUND_NO_HOLIDAY_DATA.getMessage();
+			}
+			
+			return SkillResponseDTO.builder()
+				.template(SkillResponseDTO.Template.builder()
+					.outputs(List.of(
+						SkillResponseDTO.Output.builder()
+							.simpleText(SkillResponseDTO.SimpleText.builder()
+								.text(text)
+								.build())
+							.build()
+					))
+					.build())
+				.build();
 		}
 		else if (category.equals("버스")) {
-			return BotResponseDTO.Response.builder()
-				.message("버스 API는 준비 중입니다.")
-				.input(input)
-				.build();
+			// return BotResponseDTO.Response.builder()
+			// 	.message("버스 API는 준비 중입니다.")
+			// 	.input(input)
+			// 	.build();
+			return null;
 		}
 		else if (category.equals("지하철")) {
-			return BotResponseDTO.Response.builder()
-				.message("지하철 API는 준비 중입니다.")
-				.input(input)
-				.build();
+			// return BotResponseDTO.Response.builder()
+			// 	.message("지하철 API는 준비 중입니다.")
+			// 	.input(input)
+			// 	.build();
+			return null;
 		}
 		
-		return BotResponseDTO.Response.builder()
-			.message(Message.UNSUPPORTED_COMMAND.getMessage())
-			.input(input)
-			.build();
+		// return BotResponseDTO.Response.builder()
+		// 	.message(Message.UNSUPPORTED_COMMAND.getMessage())
+		// 	.input(input)
+		// 	.build();
+		return null;
 	}
 
 	/**

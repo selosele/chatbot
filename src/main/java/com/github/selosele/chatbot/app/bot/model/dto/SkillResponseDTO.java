@@ -5,6 +5,9 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * 카카오톡 스킬 응답 DTO
+ */
 @Getter
 @Builder
 public class SkillResponseDTO {
