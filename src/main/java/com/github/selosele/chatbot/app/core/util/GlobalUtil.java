@@ -7,7 +7,7 @@ public class GlobalUtil {
   /**
    * 클라이언트의 IP 주소를 가져오기 위한 HTTP 헤더 목록
    */
-  private static final String[] headerTypes = {
+  private static final String[] HEADER_TYPES = {
     "X-Forwarded-For",
     "Proxy-Client-IP",
     "WL-Proxy-Client-IP",
@@ -23,12 +23,20 @@ public class GlobalUtil {
   public static String getClientIP(HttpServletRequest request) {
     String ip = null;
 
-    for (String headerType : headerTypes) {
-      ip = request.getHeader(headerType);
-      if (ip != null) break;
+    for (String header : HEADER_TYPES) {
+      ip = request.getHeader(header);
+      if (ip != null && !ip.isBlank() && !"unknown".equalsIgnoreCase(ip)) {
+        // 여러 IP가 있을 경우 첫 번째 것만 사용
+        if (ip.contains(",")) {
+          ip = ip.split(",")[0].trim();
+        }
+        break;
+      }
     }
 
-    if (ip == null) ip = request.getRemoteAddr();
+    if (ip == null || ip.isBlank() || "unknown".equalsIgnoreCase(ip)) {
+      ip = request.getRemoteAddr();
+    }
 
     return ip;
   }
