@@ -62,7 +62,7 @@ public class BotService {
 			if (response.getData() != null && !response.getData().isEmpty()) {
 				for (var holiday : response.getData()) {
 					if (holiday.getIsHoliday().equals("Y")) {
-						// 예시: 20250606: 현충일
+						// 예시) 20250606: 현충일
 						text += String.format("%s: %s\n", holiday.getLocdate(), holiday.getDateName());
 					}
 				}
