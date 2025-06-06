@@ -1,8 +1,11 @@
-package com.github.selosele.chatbot.app.core.constant;
+package com.github.selosele.chatbot.core.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 봇의 응답 메시지를 정의하는 Enum 클래스
+ */
 @Getter
 @RequiredArgsConstructor
 public enum Message {

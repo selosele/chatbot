@@ -1,4 +1,4 @@
-package com.github.selosele.chatbot.app.core.resolver;
+package com.github.selosele.chatbot.core.resolver;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -6,11 +6,14 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.github.selosele.chatbot.app.core.annotation.ClientIP;
-import com.github.selosele.chatbot.app.core.util.GlobalUtil;
+import com.github.selosele.chatbot.core.annotation.ClientIP;
+import com.github.selosele.chatbot.core.util.GlobalUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * 클라이언트의 IP 주소를 메소드 인자로 주입하기 위한 Argument Resolver
+ */
 public class ClientIPArgumentResolver implements HandlerMethodArgumentResolver {
 
   @Override

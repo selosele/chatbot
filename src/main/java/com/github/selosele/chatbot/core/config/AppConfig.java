@@ -1,4 +1,4 @@
-package com.github.selosele.chatbot.app.core.config;
+package com.github.selosele.chatbot.core.config;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.github.selosele.chatbot.app.core.resolver.ClientIPArgumentResolver;
+import com.github.selosele.chatbot.core.resolver.ClientIPArgumentResolver;
 
 @Configuration
 @PropertySources({

@@ -1,4 +1,4 @@
-package com.github.selosele.chatbot.app.core.api.service;
+package com.github.selosele.chatbot.core.api.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.github.selosele.chatbot.app.core.constant.Message;
+import com.github.selosele.chatbot.core.constant.Message;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

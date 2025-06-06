@@ -1,4 +1,4 @@
-package com.github.selosele.chatbot.app.bot.model.dto;
+package com.github.selosele.chatbot.bot.model.dto;
 
 import java.util.Map;
 

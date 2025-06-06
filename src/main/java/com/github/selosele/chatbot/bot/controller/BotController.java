@@ -1,14 +1,14 @@
-package com.github.selosele.chatbot.app.bot.controller;
+package com.github.selosele.chatbot.bot.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.selosele.chatbot.app.bot.model.dto.BotRequestDTO;
-import com.github.selosele.chatbot.app.bot.model.dto.SkillResponseDTO;
-import com.github.selosele.chatbot.app.bot.service.BotService;
-import com.github.selosele.chatbot.app.core.annotation.ClientIP;
+import com.github.selosele.chatbot.bot.model.dto.BotRequestDTO;
+import com.github.selosele.chatbot.bot.model.dto.SkillResponseDTO;
+import com.github.selosele.chatbot.bot.service.BotService;
+import com.github.selosele.chatbot.core.annotation.ClientIP;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

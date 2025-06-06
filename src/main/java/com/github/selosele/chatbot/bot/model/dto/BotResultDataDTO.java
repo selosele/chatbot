@@ -1,4 +1,4 @@
-package com.github.selosele.chatbot.app.bot.model.dto;
+package com.github.selosele.chatbot.bot.model.dto;
 
 import lombok.Builder;
 import lombok.Getter;

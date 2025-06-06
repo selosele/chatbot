@@ -1,7 +1,10 @@
-package com.github.selosele.chatbot.app.core.util;
+package com.github.selosele.chatbot.core.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * 전역에서 사용되는 유틸리티 클래스
+ */
 public class GlobalUtil {
 
   /**

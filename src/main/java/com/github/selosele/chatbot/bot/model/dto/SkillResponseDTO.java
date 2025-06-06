@@ -1,4 +1,4 @@
-package com.github.selosele.chatbot.app.bot.model.dto;
+package com.github.selosele.chatbot.bot.model.dto;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import lombok.Getter;
 @Builder
 public class SkillResponseDTO {
 
-  private final String version = "2.0";
+	private final String version = "2.0";
 	private Template template;
 
 	@Getter
@@ -32,4 +32,5 @@ public class SkillResponseDTO {
 	public static class SimpleText {
 		private String text;
 	}
+
 }
