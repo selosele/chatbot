@@ -6,14 +6,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.selosele.chatbot.bot.model.dto.BotRequestDTO;
-import com.github.selosele.chatbot.bot.model.dto.SkillResponseDTO;
 import com.github.selosele.chatbot.bot.service.BotService;
 import com.github.selosele.chatbot.core.annotation.ClientIP;
+import com.github.selosele.chatbot.core.annotation.LogBotResponse;
+import com.github.selosele.chatbot.core.model.dto.SkillResponseDTO;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class BotController {
@@ -25,15 +24,11 @@ public class BotController {
 	 * @return 봇의 응답
 	 */
 	@PostMapping("/")
+	@LogBotResponse
 	public ResponseEntity<SkillResponseDTO> getBotResponse(
 		@ClientIP String ip,
 		@RequestBody(required = false) BotRequestDTO botRequestDTO) {
-
-		String input = botRequestDTO.getUserRequest().getUtterance();
-		SkillResponseDTO response = botService.getResponse(botRequestDTO);
-
-		log.info("Client IP: {}, Input: {}, Bot Response: {}", ip, input, response.toString());
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(botService.getResponse(botRequestDTO));
 	}
 
 }
