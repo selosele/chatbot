@@ -41,7 +41,7 @@ public class HolidayService {
 	 * @param input 사용자 입력 (공휴일/yyyy/MM 형식)
 	 * @return 공휴일 정보
 	 */
-	public BotResponseDTO<BotResultDataDTO.Holiday> getHolidayResponse(String input) {
+	public BotResponseDTO<BotResultDataDTO.Holiday> getResponse(String input) {
 
 		// 입력 값 예시) 공휴일/2025/06
 		String[] parts = {

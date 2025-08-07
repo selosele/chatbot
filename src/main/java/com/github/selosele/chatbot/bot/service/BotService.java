@@ -31,18 +31,14 @@ public class BotService {
 
 		if (!isValidInput(input)) {
 			log.error(Message.IS_INPUT_BLANK.getMessage());
-			// return BotResponseDTO.builder()
-			// 	.message(Message.IS_INPUT_BLANK.getMessage())
-			// 	.input(input)
-			// 	.build();
-			return null;
+			return SkillResponseDTO.of(Message.IS_INPUT_BLANK.getMessage());
 		}
 
 		String category = input.split("/")[0];
 		if (category.equals("공휴일")) {
 			StringBuilder text = new StringBuilder();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-			var response = holidayService.getHolidayResponse(input);
+			var response = holidayService.getResponse(input);
 
 			if (CommonUtil.isNotEmpty(response.getData())) {
 				for (var holiday : response.getData()) {
@@ -68,26 +64,10 @@ public class BotService {
 			
 			return SkillResponseDTO.of(text.toString());
 		}
-		else if (category.equals("버스")) {
-			// return BotResponseDTO.builder()
-			// 	.message("버스 API는 준비 중입니다.")
-			// 	.input(input)
-			// 	.build();
-			return null;
-		}
-		else if (category.equals("지하철")) {
-			// return BotResponseDTO.builder()
-			// 	.message("지하철 API는 준비 중입니다.")
-			// 	.input(input)
-			// 	.build();
-			return null;
-		}
+		else if (category.equals("버스"))   return SkillResponseDTO.of("버스 API는 준비 중입니다.");
+		else if (category.equals("지하철")) return SkillResponseDTO.of("지하철 API는 준비 중입니다.");
 		
-		// return BotResponseDTO.builder()
-		// 	.message(Message.UNSUPPORTED_COMMAND.getMessage())
-		// 	.input(input)
-		// 	.build();
-		return null;
+		return SkillResponseDTO.of(Message.UNSUPPORTED_COMMAND.getMessage());
 	}
 
 	/**
