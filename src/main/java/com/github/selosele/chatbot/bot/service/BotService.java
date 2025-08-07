@@ -3,8 +3,8 @@ package com.github.selosele.chatbot.bot.service;
 import org.springframework.stereotype.Service;
 
 import com.github.selosele.chatbot.bot.model.dto.BotRequestDTO;
-import com.github.selosele.chatbot.bot.model.dto.SkillResponseDTO;
 import com.github.selosele.chatbot.core.constant.Message;
+import com.github.selosele.chatbot.core.model.dto.SkillResponseDTO;
 import com.github.selosele.chatbot.core.util.CommonUtil;
 
 import lombok.RequiredArgsConstructor;
