@@ -21,6 +21,26 @@ public class DateUtil {
   }
 
   /**
+   * 날짜를 지정된 형식으로 문자열로 변환하는 메소드
+   * @param format 날짜 형식
+   * @return 날짜를 지정된 형식으로 변환한 문자열
+   */
+  public static String getDateString(String sourceFormat, String targetFormat, String dateStr) {
+    if (dateStr == null || dateStr.isEmpty()) return "";
+    try {
+      // 입력 문자열 포맷에 맞게 먼저 파싱
+      SimpleDateFormat inputFormat = new SimpleDateFormat(sourceFormat);
+      Date date = inputFormat.parse(dateStr);
+        
+      // 원하는 출력 포맷으로 변환
+      SimpleDateFormat outputFormat = new SimpleDateFormat(targetFormat);
+      return outputFormat.format(date);
+    } catch (Exception e) {
+      return "";
+    }
+  }
+
+  /**
    * 문자열이 유효한 날짜 형식인지 확인하는 메소드
    * @param dateStr 확인할 날짜 문자열
    * @param format 날짜 형식

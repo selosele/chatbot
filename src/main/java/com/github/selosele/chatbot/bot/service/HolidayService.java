@@ -1,5 +1,7 @@
 package com.github.selosele.chatbot.bot.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ import com.github.selosele.chatbot.bot.model.dto.BotResultDataDTO;
 import com.github.selosele.chatbot.core.api.service.ApiService;
 import com.github.selosele.chatbot.core.constant.DataType;
 import com.github.selosele.chatbot.core.constant.Message;
+import com.github.selosele.chatbot.core.util.CommonUtil;
 import com.github.selosele.chatbot.core.util.DateUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -92,6 +95,35 @@ public class HolidayService {
 			return BotResponseDTO.<BotResultDataDTO.Holiday>of(null, input, Message.BOT_RESPONSE_ERROR.getMessage());
 		}
 	}
+
+  /**
+   * 공휴일 정보를 문자열로 변환하는 메소드
+   * @param response 공휴일 정보 응답
+   * @return 공휴일 정보를 문자열로 변환한 결과
+   */
+  public String responseToString(BotResponseDTO<BotResultDataDTO.Holiday> response) {
+    StringBuilder text = new StringBuilder();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+    if (CommonUtil.isNotEmpty(response.getData())) {
+      for (var holiday : response.getData()) {
+        if (holiday.getIsHoliday().equals("Y")) {
+          LocalDate date = LocalDate.parse(holiday.getLocdate(), formatter);     // 날짜 문자열을 LocalDate로 변환
+          String dayOfWeekKor = DateUtil.getDayOfWeekToKor(date.getDayOfWeek()); // 요일을 한글로 변환
+          
+          // 출력 예시: 2025년 06월 06일(금): 현충일
+          text.append(String.format("%s(%s): %s\n",
+						DateUtil.getDateString("yyyyMMdd", "yyyy년 MM월 dd일", holiday.getLocdate()),
+						dayOfWeekKor,
+						holiday.getDateName())
+					);
+        }
+      }
+    } else {
+      text.append(response.getMessage());
+    }
+    return text.toString();
+  }
 
 	/**
 	 * 공휴일 정보를 파싱하는 메소드
