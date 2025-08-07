@@ -1,7 +1,10 @@
 package com.github.selosele.chatbot.core.util;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.util.Date;
+
+import com.github.selosele.chatbot.core.constant.CustomDayOfWeek;
 
 /**
  * 날짜 관련 유틸리티 클래스
@@ -35,6 +38,23 @@ public class DateUtil {
     } catch (Exception e) {
       return false;
     }
+  }
+
+  /**
+   * 요일을 한글로 변환하는 메소드
+   * @param value 요일 값
+   * @return 한글 요일 이름
+   */
+  public static String getDayOfWeekToKor(DayOfWeek value) {
+    return switch (value) {
+      case MONDAY 	 -> CustomDayOfWeek.MONDAY.getDayName();
+      case TUESDAY 	 -> CustomDayOfWeek.TUESDAY.getDayName();
+      case WEDNESDAY -> CustomDayOfWeek.WEDNESDAY.getDayName();
+      case THURSDAY  -> CustomDayOfWeek.THURSDAY.getDayName();
+      case FRIDAY 	 -> CustomDayOfWeek.FRIDAY.getDayName();
+      case SATURDAY  -> CustomDayOfWeek.SATURDAY.getDayName();
+      case SUNDAY    -> CustomDayOfWeek.SUNDAY.getDayName();
+    };
   }
 
 }

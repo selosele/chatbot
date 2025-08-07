@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.github.selosele.chatbot.bot.model.dto.BotRequestDTO;
 import com.github.selosele.chatbot.bot.model.dto.SkillResponseDTO;
-import com.github.selosele.chatbot.core.constant.CustomDayOfWeek;
 import com.github.selosele.chatbot.core.constant.Message;
 import com.github.selosele.chatbot.core.util.CommonUtil;
+import com.github.selosele.chatbot.core.util.DateUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,16 +43,8 @@ public class BotService {
 			if (CommonUtil.isNotEmpty(response.getData())) {
 				for (var holiday : response.getData()) {
 					if (holiday.getIsHoliday().equals("Y")) {
-						LocalDate date = LocalDate.parse(holiday.getLocdate(), formatter); // 날짜 문자열을 LocalDate로 변환
-						String dayOfWeekKor = switch (date.getDayOfWeek()) {							 // 요일을 한글 요일로 변환 (예: 월, 화, 수, 목, 금, 토, 일)
-							case MONDAY 	 -> CustomDayOfWeek.MONDAY.getDayName();
-							case TUESDAY 	 -> CustomDayOfWeek.TUESDAY.getDayName();
-							case WEDNESDAY -> CustomDayOfWeek.WEDNESDAY.getDayName();
-							case THURSDAY  -> CustomDayOfWeek.THURSDAY.getDayName();
-							case FRIDAY 	 -> CustomDayOfWeek.FRIDAY.getDayName();
-							case SATURDAY  -> CustomDayOfWeek.SATURDAY.getDayName();
-							case SUNDAY    -> CustomDayOfWeek.SUNDAY.getDayName();
-						};
+						LocalDate date = LocalDate.parse(holiday.getLocdate(), formatter);     // 날짜 문자열을 LocalDate로 변환
+						String dayOfWeekKor = DateUtil.getDayOfWeekToKor(date.getDayOfWeek()); // 요일을 한글로 변환
 						
 						// 출력 예시: 20250606(금): 현충일
 						text.append(String.format("%s(%s): %s\n", holiday.getLocdate(), dayOfWeekKor, holiday.getDateName()));
