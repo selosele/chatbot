@@ -4,12 +4,14 @@ import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * 카카오톡 스킬 응답 DTO
  */
 @Getter
 @Builder
+@ToString
 public class SkillResponseDTO {
 
 	private final String version = "2.0";
@@ -17,20 +19,35 @@ public class SkillResponseDTO {
 
 	@Getter
 	@Builder
+	@ToString
 	public static class Template {
 		private List<Output> outputs;
 	}
 
 	@Getter
 	@Builder
+	@ToString
 	public static class Output {
 		private SimpleText simpleText;
 	}
 
 	@Getter
 	@Builder
+	@ToString
 	public static class SimpleText {
 		private String text;
+	}
+
+	public static SkillResponseDTO of(String text) {
+		return SkillResponseDTO.builder()
+			.template(Template.builder()
+				.outputs(List.of(Output.builder()
+					.simpleText(SimpleText.builder()
+						.text(text)
+						.build())
+					.build()))
+				.build())
+			.build();
 	}
 
 }
