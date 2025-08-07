@@ -21,7 +21,7 @@ import com.github.selosele.chatbot.bot.model.dto.BotResultDataDTO;
 import com.github.selosele.chatbot.bot.model.dto.SkillResponseDTO;
 import com.github.selosele.chatbot.core.api.service.ApiService;
 import com.github.selosele.chatbot.core.constant.Message;
-import com.github.selosele.chatbot.core.util.GlobalUtil;
+import com.github.selosele.chatbot.core.util.CommonUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -225,7 +225,7 @@ public class BotService {
 	 * @return 유효성 검사 결과
 	 */
 	private boolean isValidInput(String input) {
-		return GlobalUtil.isNotBlank(input);
+		return CommonUtil.isNotBlank(input);
 	}
 
 }

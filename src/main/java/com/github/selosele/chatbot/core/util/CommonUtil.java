@@ -3,9 +3,9 @@ package com.github.selosele.chatbot.core.util;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * 전역에서 사용되는 유틸리티 클래스
+ * 공통으로 사용되는 유틸리티 클래스
  */
-public class GlobalUtil {
+public class CommonUtil {
 
   /**
    * 클라이언트의 IP 주소를 가져오기 위한 HTTP 헤더 목록

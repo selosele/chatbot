@@ -7,7 +7,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.github.selosele.chatbot.core.annotation.ClientIP;
-import com.github.selosele.chatbot.core.util.GlobalUtil;
+import com.github.selosele.chatbot.core.util.CommonUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -24,7 +24,7 @@ public class ClientIPArgumentResolver implements HandlerMethodArgumentResolver {
   @Override
   public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                 NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-    return GlobalUtil.getClientIP(webRequest.getNativeRequest(HttpServletRequest.class));
+    return CommonUtil.getClientIP(webRequest.getNativeRequest(HttpServletRequest.class));
   }
   
 }
