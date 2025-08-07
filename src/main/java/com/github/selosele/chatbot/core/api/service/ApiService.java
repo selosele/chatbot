@@ -37,7 +37,7 @@ public class ApiService {
 	 */
 	public String request(String endpoint, Map<String, Object> data, String method, String returnType) {
 		if (method.equalsIgnoreCase(HttpMethod.GET.name())) {
-			return requestForGet(endpoint, data, returnType);
+			return get(endpoint, data, returnType);
 		}
 
 		String message = Message.UNSUPPORTED_HTTP_METHOD.getMessage() + method;
@@ -52,7 +52,7 @@ public class ApiService {
 	 * @param returnType
 	 * @return 응답 문자열
 	 */
-	private String requestForGet(String endpoint, Map<String, Object> data, String returnType) {
+	private String get(String endpoint, Map<String, Object> data, String returnType) {
 		HttpURLConnection conn = null;
 		BufferedReader rd = null;
 
