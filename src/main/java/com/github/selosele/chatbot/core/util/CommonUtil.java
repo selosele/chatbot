@@ -1,5 +1,7 @@
 package com.github.selosele.chatbot.core.util;
 
+import java.util.List;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -54,6 +56,7 @@ public class CommonUtil {
     if (obj instanceof String) return ((String) obj).trim().isEmpty();
     if (obj instanceof Iterable) return !((Iterable<?>) obj).iterator().hasNext();
     if (obj instanceof Object[]) return ((Object[]) obj).length == 0;
+    if (obj instanceof List) return ((List<?>) obj).isEmpty();
     return false;
   }
 

@@ -6,14 +6,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.github.selosele.chatbot.core.constant.DataType;
 import com.github.selosele.chatbot.core.constant.Message;
 
 import lombok.RequiredArgsConstructor;
@@ -63,9 +66,9 @@ public class ApiService {
 				boolean first = true;
 				for (Map.Entry<String, Object> entry : data.entrySet()) {
 					if (!first) urlBuilder.append("&");
-					urlBuilder.append(URLEncoder.encode(entry.getKey(), "UTF-8"))
+					urlBuilder.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8))
 						.append("=")
-						.append(URLEncoder.encode(entry.getValue().toString(), "UTF-8"));
+						.append(URLEncoder.encode(entry.getValue().toString(), StandardCharsets.UTF_8));
 					first = false;
 				}
 			}
@@ -73,11 +76,9 @@ public class ApiService {
 			URL url = new URL(urlBuilder.toString());
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod(HttpMethod.GET.name());
-			conn.setRequestProperty("Content-type", "application/json");
+			conn.setRequestProperty("Content-type", MediaType.APPLICATION_JSON_VALUE);
 
 			int responseCode = conn.getResponseCode();
-			System.out.println("Response code: " + responseCode);
-
 			rd = new BufferedReader(new InputStreamReader(
 				responseCode >= 200 && responseCode <= 299 ? conn.getInputStream() : conn.getErrorStream()));
 
@@ -87,10 +88,10 @@ public class ApiService {
 				sb.append(line);
 			}
 
-			if (returnType.equalsIgnoreCase("xml")) {
+			if (returnType.equalsIgnoreCase(DataType.XML.getName())) {
 				Map<String, Object> map = xmlMapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>() {});
 				return objectMapper.writeValueAsString(map);
-			} else if (returnType.equalsIgnoreCase("json")) {
+			} else if (returnType.equalsIgnoreCase(DataType.JSON.getName())) {
 
 			}
 
