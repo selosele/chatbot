@@ -24,7 +24,7 @@ public class BotController {
 	 * 봇의 응답을 처리하는 엔드포인트
 	 * @return 봇의 응답
 	 */
-	@PostMapping(value = "/", produces = "application/json")
+	@PostMapping("/")
 	public ResponseEntity<SkillResponseDTO> getBotResponse(
 		@ClientIP String ip,
 		@RequestBody(required = false) BotRequestDTO botRequestDTO) {
