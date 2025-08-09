@@ -20,8 +20,8 @@ public class BotController {
 	private final BotService botService;
 
 	/**
-	 * 카카오톡 챗봇의 응답을 처리하는 엔드포인트
-	 * @return 카카오톡 챗봇의 응답
+	 * 카카오톡 봇의 응답을 처리하는 엔드포인트
+	 * @return 카카오톡 봇의 응답
 	 */
 	@PostMapping("/")
 	@LogBotResponse

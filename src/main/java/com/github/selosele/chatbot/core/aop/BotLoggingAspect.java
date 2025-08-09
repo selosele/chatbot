@@ -30,7 +30,7 @@ public class BotLoggingAspect {
       if (arg instanceof String) {
         clientIp = (String) arg;
       }
-      // 카카오톡 챗봇 요청 DTO
+      // 카카오톡 봇 요청 DTO
       else if (arg instanceof KakaoBotRequestDTO) {
         KakaoBotRequestDTO dto = (KakaoBotRequestDTO) arg;
         if (dto != null && dto.getUserRequest() != null) {

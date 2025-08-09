@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 
 /**
- * 카카오톡 챗봇의 요청 DTO
+ * 카카오톡 봇의 요청 DTO
  */
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
