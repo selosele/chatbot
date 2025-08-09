@@ -2,6 +2,9 @@ package com.github.selosele.chatbot.core.util;
 
 import java.util.List;
 
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -44,6 +47,14 @@ public class CommonUtil {
     }
 
     return ip;
+  }
+
+  /**
+   * 현재 요청의 HttpServletRequest 객체를 가져오는 메소드
+   * @return 현재 요청의 HttpServletRequest 객체
+   */
+  public static HttpServletRequest getRequest() {
+    return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
   }
 
   /**
