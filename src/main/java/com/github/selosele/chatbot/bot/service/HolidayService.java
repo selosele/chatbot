@@ -48,14 +48,14 @@ public class HolidayService {
 		// 날짜 형식이 올바른지 확인
 		// 1. 공휴일/yyyy 형식
 		if (parts.length == 2 && !DateUtil.isValidDate(parts[1], "yyyy")) {
-			String message = "날짜 형식이 올바르지 않습니다. '공휴일/yyyy' 형식으로 입력해주세요.";
+			String message = "날짜 형식이 올바르지 않습니다. '공휴일/연도(4자리)' 형식으로 입력해주세요.";
 			log.error(message);
 			return BotResultDTO.<HolidayResultDTO>of(null, input, message);
 		}
 
 		// 2. 공휴일/yyyy/MM 형식
 		if (parts.length == 3 && (!DateUtil.isValidDate(parts[1], "yyyy") || !DateUtil.isValidDate(parts[2], "MM"))) {
-			String message = "날짜 형식이 올바르지 않습니다. '공휴일/yyyy' 또는 '공휴일/yyyy/MM' 형식으로 입력해주세요.";
+			String message = "날짜 형식이 올바르지 않습니다. '공휴일/연도(4자리)' 또는 '공휴일/연도(4자리)/월(2자리)' 형식으로 입력해주세요.";
 			log.error(message);
 			return BotResultDTO.<HolidayResultDTO>of(null, input, message);
 		}
