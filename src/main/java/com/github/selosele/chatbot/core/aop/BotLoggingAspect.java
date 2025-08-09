@@ -6,7 +6,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import com.github.selosele.chatbot.bot.model.dto.BotRequestDTO;
+import com.github.selosele.chatbot.core.model.dto.KakaoBotRequestDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,8 +29,10 @@ public class BotLoggingAspect {
     for (Object arg : args) {
       if (arg instanceof String) {
         clientIp = (String) arg;
-      } else if (arg instanceof BotRequestDTO) {
-        BotRequestDTO dto = (BotRequestDTO) arg;
+      }
+      // 카카오톡 챗봇 요청 DTO
+      else if (arg instanceof KakaoBotRequestDTO) {
+        KakaoBotRequestDTO dto = (KakaoBotRequestDTO) arg;
         if (dto != null && dto.getUserRequest() != null) {
           input = dto.getUserRequest().getUtterance();
         }

@@ -1,4 +1,4 @@
-package com.github.selosele.chatbot.bot.model.dto;
+package com.github.selosele.chatbot.core.model.dto;
 
 import java.util.Map;
 
@@ -7,11 +7,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 
 /**
- * 봇의 요청 DTO
+ * 카카오톡 챗봇의 요청 DTO
  */
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BotRequestDTO {
+public class KakaoBotRequestDTO {
 
 	private Intent intent;
 	private UserRequest userRequest;

@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class SkillResponseDTO {
+public class KakaoSkillResponseDTO {
 
 	private final String version = "2.0";
 	private Template template;
@@ -38,8 +38,8 @@ public class SkillResponseDTO {
 		private String text;
 	}
 
-	public static SkillResponseDTO of(String text) {
-		return SkillResponseDTO.builder()
+	public static KakaoSkillResponseDTO of(String text) {
+		return KakaoSkillResponseDTO.builder()
 			.template(Template.builder()
 				.outputs(List.of(Output.builder()
 					.simpleText(SimpleText.builder()

@@ -1,4 +1,4 @@
-package com.github.selosele.chatbot.bot.model.dto;
+package com.github.selosele.chatbot.core.model.dto;
 
 import java.util.List;
 

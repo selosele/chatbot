@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.selosele.chatbot.bot.model.dto.BotRequestDTO;
 import com.github.selosele.chatbot.bot.service.BotService;
 import com.github.selosele.chatbot.core.annotation.ClientIP;
 import com.github.selosele.chatbot.core.annotation.LogBotResponse;
-import com.github.selosele.chatbot.core.model.dto.SkillResponseDTO;
+import com.github.selosele.chatbot.core.model.dto.KakaoBotRequestDTO;
+import com.github.selosele.chatbot.core.model.dto.KakaoSkillResponseDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,15 +20,15 @@ public class BotController {
 	private final BotService botService;
 
 	/**
-	 * 봇의 응답을 처리하는 엔드포인트
-	 * @return 봇의 응답
+	 * 카카오톡 챗봇의 응답을 처리하는 엔드포인트
+	 * @return 카카오톡 챗봇의 응답
 	 */
 	@PostMapping("/")
 	@LogBotResponse
-	public ResponseEntity<SkillResponseDTO> getBotResponse(
+	public ResponseEntity<KakaoSkillResponseDTO> getKakaoBotResponse(
 		@ClientIP String ip,
-		@RequestBody(required = false) BotRequestDTO botRequestDTO) {
-		return ResponseEntity.ok(botService.getResponse(botRequestDTO));
+		@RequestBody(required = false) KakaoBotRequestDTO dto) {
+		return ResponseEntity.ok(botService.getResponse(dto));
 	}
 
 }
