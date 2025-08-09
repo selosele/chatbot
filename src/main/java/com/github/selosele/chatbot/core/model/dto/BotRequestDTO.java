@@ -18,10 +18,8 @@ import lombok.ToString;
 @AllArgsConstructor
 public class BotRequestDTO {
 
-	/**
-	 * 사용자 입력
-	 */
 	private String input;
+	private String category;
 
 	/**
 	 * 카카오톡 봇의 요청 DTO

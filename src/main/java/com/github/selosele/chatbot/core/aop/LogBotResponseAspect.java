@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Aspect
 @Component
-public class BotLoggingAspect {
+public class LogBotResponseAspect {
   
   /**
    * 봇 응답을 로깅하는 메소드
