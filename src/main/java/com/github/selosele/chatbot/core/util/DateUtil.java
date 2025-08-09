@@ -35,7 +35,7 @@ public class DateUtil {
       // 원하는 출력 포맷으로 변환
       SimpleDateFormat outputFormat = new SimpleDateFormat(targetFormat);
       return outputFormat.format(date);
-    } catch (Exception e) {
+    } catch (Exception ex) {
       return "";
     }
   }
@@ -55,7 +55,7 @@ public class DateUtil {
       SimpleDateFormat sdf = new SimpleDateFormat(format);
       sdf.setLenient(false);
       return sdf.format(sdf.parse(dateStr)).equals(dateStr);
-    } catch (Exception e) {
+    } catch (Exception ex) {
       return false;
     }
   }
@@ -75,6 +75,14 @@ public class DateUtil {
       case SATURDAY  -> CustomDayOfWeek.SATURDAY.getDayName();
       case SUNDAY    -> CustomDayOfWeek.SUNDAY.getDayName();
     };
+  }
+
+  /**
+   * 현재 연도를 문자열로 반환하는 메소드
+   * @return 현재 연도
+   */
+  public static String getCurrentYear() {
+    return new SimpleDateFormat("yyyy").format(new Date());
   }
 
 }
