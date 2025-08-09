@@ -17,9 +17,9 @@ public class BotResponseDTO {
 	 */
 	private KakaoSkillResponseDTO kakaoSkillResponse;
 
-	public static BotResponseDTO of(String message) {
+	public static BotResponseDTO of(String text) {
 		return BotResponseDTO.builder()
-			.kakaoSkillResponse(KakaoSkillResponseDTO.of(message))
+			.kakaoSkillResponse(KakaoSkillResponseDTO.of(text))
 			.build();
 	}
 	
