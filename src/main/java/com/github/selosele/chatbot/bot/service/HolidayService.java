@@ -14,11 +14,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.selosele.chatbot.bot.model.dto.HolidayDTO.GetHolidayRequestDTO;
 import com.github.selosele.chatbot.bot.model.dto.HolidayDTO.HolidayResultDTO;
 import com.github.selosele.chatbot.core.api.service.ApiService;
-import com.github.selosele.chatbot.core.constant.Category;
 import com.github.selosele.chatbot.core.constant.DataType;
 import com.github.selosele.chatbot.core.constant.Message;
 import com.github.selosele.chatbot.core.model.dto.BotResultDTO;
-import com.github.selosele.chatbot.core.util.BotUtil;
 import com.github.selosele.chatbot.core.util.CommonUtil;
 import com.github.selosele.chatbot.core.util.DateUtil;
 
@@ -41,28 +39,20 @@ public class HolidayService {
 
   /**
 	 * 공휴일 정보를 조회하는 메소드
-	 * @param input 사용자 입력 (공휴일/yyyy or 공휴일/yyyy/MM 형식)
+	 * @param input 사용자 입력 ("공휴일" or "공휴일/yyyy" or "공휴일/yyyy/MM" 형식)
 	 * @return 공휴일 정보
 	 */
 	public BotResultDTO<HolidayResultDTO> getResponse(String input) {
 		String[] parts = input.split("/");
-		String category = BotUtil.extractCategory(input);
-
-		// 1. "공휴일" 형식
-		if (parts.length == 1 && !category.equals(Category.HOLIDAY.getName())) {
-			String message = "올바른 입력 형식이 아닙니다. '공휴일' 또는 '공휴일/연도(4자리)' 또는 '공휴일/연도(4자리)/월(2자리)' 형식으로 입력해주세요.";
-			log.error(message);
-			return BotResultDTO.<HolidayResultDTO>of(null, input, message);
-		}
 		
-		// 2. "공휴일/yyyy" 형식
+		// 1. "공휴일/yyyy" 형식
 		if (parts.length == 2 && !DateUtil.isValidDate(parts[1], "yyyy")) {
 			String message = "날짜 형식이 올바르지 않습니다. '공휴일/연도(4자리)' 형식으로 입력해주세요.";
 			log.error(message);
 			return BotResultDTO.<HolidayResultDTO>of(null, input, message);
 		}
 
-		// 3. "공휴일/yyyy/MM" 형식
+		// 2. "공휴일/yyyy/MM" 형식
 		if (parts.length == 3 && (!DateUtil.isValidDate(parts[1], "yyyy") || !DateUtil.isValidDate(parts[2], "MM"))) {
 			String message = "날짜 형식이 올바르지 않습니다. '공휴일/연도(4자리)/월(2자리)' 형식으로 입력해주세요.";
 			log.error(message);
