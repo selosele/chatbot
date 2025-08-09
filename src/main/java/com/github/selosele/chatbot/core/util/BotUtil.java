@@ -1,5 +1,6 @@
 package com.github.selosele.chatbot.core.util;
 
+import com.github.selosele.chatbot.core.model.dto.BotRequestDTO;
 import com.github.selosele.chatbot.core.model.dto.KakaoBotRequestDTO;
 
 /**
@@ -18,6 +19,18 @@ public class BotUtil {
       if (dto != null && dto.getUserRequest() != null) {
         return dto.getUserRequest().getUtterance();
       }
+    }
+    return null;
+  }
+
+  /**
+   * 봇 요청 DTO에서 사용자 입력을 추출하는 메소드
+   * @param dto 봇 요청 DTO
+   * @return 사용자 입력 문자열
+   */
+  public static String extractInput(BotRequestDTO dto) {
+    if (dto != null && dto.getKakaoBotRequest() != null) { // 카카오톡 봇 요청 DTO
+      return dto.getKakaoBotRequest().getUserRequest().getUtterance();
     }
     return null;
   }

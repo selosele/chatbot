@@ -1,7 +1,5 @@
 package com.github.selosele.chatbot.core.model.dto;
 
-import java.util.List;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -12,17 +10,16 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class BotResponseDTO<T> {
+public class BotResponseDTO {
 
-	private List<T> data;
-	private String input;
-	private String message;
+	/**
+	 * 카카오톡 봇의 응답 DTO
+	 */
+	private KakaoSkillResponseDTO kakaoSkillResponse;
 
-	public static <T> BotResponseDTO<T> of(List<T> data, String input, String message) {
-		return BotResponseDTO.<T>builder()
-			.data(data)
-			.input(input)
-			.message(message)
+	public static BotResponseDTO of(String message) {
+		return BotResponseDTO.builder()
+			.kakaoSkillResponse(KakaoSkillResponseDTO.of(message))
 			.build();
 	}
 	
