@@ -5,11 +5,13 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * 카카오톡 봇의 요청 DTO
  */
 @Getter
+@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KakaoBotRequestDTO {
 

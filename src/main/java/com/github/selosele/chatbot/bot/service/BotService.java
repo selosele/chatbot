@@ -2,7 +2,7 @@ package com.github.selosele.chatbot.bot.service;
 
 import org.springframework.stereotype.Service;
 
-import com.github.selosele.chatbot.bot.model.dto.HolidayDTO;
+import com.github.selosele.chatbot.bot.model.dto.HolidayDTO.HolidayResultDTO;
 import com.github.selosele.chatbot.core.annotation.ValidateBotRequest;
 import com.github.selosele.chatbot.core.constant.Category;
 import com.github.selosele.chatbot.core.constant.Message;
@@ -29,7 +29,7 @@ public class BotService {
 	public BotResponseDTO getResponse(BotRequestDTO dto) {
 		String category = dto.getCategory();
 		if (category.equals(Category.HOLIDAY.getName())) {
-			BotResultDTO<HolidayDTO> response = holidayService.getResponse(dto.getInput());
+			BotResultDTO<HolidayResultDTO> response = holidayService.getResponse(dto.getInput());
 			return BotResponseDTO.of(holidayService.responseToString(response));
 		}
 		else if (category.equals(Category.BUS.getName()))    return BotResponseDTO.of("버스 API는 준비 중입니다.");

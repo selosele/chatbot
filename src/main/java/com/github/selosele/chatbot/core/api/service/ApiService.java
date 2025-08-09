@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.github.selosele.chatbot.core.constant.DataType;
 import com.github.selosele.chatbot.core.constant.Message;
+import com.github.selosele.chatbot.core.model.dto.ApiRequestDTO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,7 @@ public class ApiService {
 	 * @param returnType
 	 * @return 응답 문자열
 	 */
-	public String request(String endpoint, Map<String, Object> data, String method, String returnType) {
+	public String request(String endpoint, ApiRequestDTO data, String method, String returnType) {
 		if (method.equalsIgnoreCase(HttpMethod.GET.name())) {
 			return get(endpoint, data, returnType);
 		}
@@ -55,16 +56,17 @@ public class ApiService {
 	 * @param returnType
 	 * @return 응답 문자열
 	 */
-	private String get(String endpoint, Map<String, Object> data, String returnType) {
+	private String get(String endpoint, ApiRequestDTO params, String returnType) {
 		HttpURLConnection conn = null;
 		BufferedReader rd = null;
 
 		try {
 			StringBuilder urlBuilder = new StringBuilder(endpoint);
-			if (!data.isEmpty()) {
+			Map<String, Object> paramsToMap = objectMapper.convertValue(params, new TypeReference<Map<String, Object>>() {});
+			if (!paramsToMap.isEmpty()) {
 				urlBuilder.append("?");
 				boolean first = true;
-				for (Map.Entry<String, Object> entry : data.entrySet()) {
+				for (Map.Entry<String, Object> entry : paramsToMap.entrySet()) {
 					if (!first) urlBuilder.append("&");
 					urlBuilder.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8))
 						.append("=")
