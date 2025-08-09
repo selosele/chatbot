@@ -3,7 +3,6 @@ package com.github.selosele.chatbot.bot.service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,25 +40,23 @@ public class HolidayService {
 
   /**
 	 * 공휴일 정보를 조회하는 메소드
-	 * @param input 사용자 입력 (공휴일/yyyy/MM 형식)
+	 * @param input 사용자 입력 (공휴일/yyyy or 공휴일/yyyy/MM 형식)
 	 * @return 공휴일 정보
 	 */
 	public BotResultDTO<HolidayDTO> getResponse(String input) {
-
-		// 입력 값 예시) 공휴일/2025/06
-		String[] parts = {
-			input,
-			DateUtil.getDateString("yyyy", new Date()),
-			DateUtil.getDateString("MM", new Date()),
-		};
-
-		if (input.split("/").length >= 3) {
-			parts = input.split("/");
-		}
+		String[] parts = input.split("/");
 		
 		// 날짜 형식이 올바른지 확인
-		if (parts.length < 3 || !DateUtil.isValidDate(parts[1], "yyyy") || !DateUtil.isValidDate(parts[2], "MM")) {
-			String message = "날짜 형식이 올바르지 않습니다. yyyy/MM 형식으로 입력해주세요.";
+		// 예시) 공휴일/yyyy 형식
+		if (parts.length == 2 && !DateUtil.isValidDate(parts[1], "yyyy")) {
+			String message = "날짜 형식이 올바르지 않습니다. '공휴일/yyyy' 형식으로 입력해주세요.";
+			log.error(message);
+			return BotResultDTO.<HolidayDTO>of(null, input, message);
+		}
+
+		// 예시) 공휴일/yyyy/MM 형식
+		if (parts.length == 3 && (!DateUtil.isValidDate(parts[1], "yyyy") || !DateUtil.isValidDate(parts[2], "MM"))) {
+			String message = "날짜 형식이 올바르지 않습니다. '공휴일/yyyy' 또는 '공휴일/yyyy/MM' 형식으로 입력해주세요.";
 			log.error(message);
 			return BotResultDTO.<HolidayDTO>of(null, input, message);
 		}
@@ -67,7 +64,8 @@ public class HolidayService {
 		Map<String, Object> params = new HashMap<>();
 		params.put("serviceKey", serviceKey);
 		params.put("solYear", parts[1]);
-		params.put("solMonth", parts[2]);
+		params.put("solMonth", parts.length == 3 ? parts[2] : "");
+		params.put("numOfRows", "100");
 
 		String response = api.request(endpoint, params, HttpMethod.GET.name(), DataType.XML.getName());
 
