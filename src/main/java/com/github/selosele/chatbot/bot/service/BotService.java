@@ -25,8 +25,7 @@ public class BotService {
 	 * @return 봇의 응답
 	 */
 	public BotResponseDTO getResponse(BotRequestDTO dto) {
-		String input = BotUtil.extractInput(dto);
-
+		String input = dto.getInput();
 		if (!BotUtil.isValidInput(input)) {
 			log.error(Message.IS_INPUT_BLANK.getMessage());
 			return BotResponseDTO.of(Message.IS_INPUT_BLANK.getMessage());
