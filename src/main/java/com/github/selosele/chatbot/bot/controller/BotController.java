@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.selosele.chatbot.bot.service.BotService;
-import com.github.selosele.chatbot.core.annotation.ClientIP;
 import com.github.selosele.chatbot.core.annotation.LogBotResponse;
 import com.github.selosele.chatbot.core.model.dto.KakaoBotRequestDTO;
 import com.github.selosele.chatbot.core.model.dto.KakaoSkillResponseDTO;
@@ -25,9 +24,7 @@ public class BotController {
 	 */
 	@PostMapping("/")
 	@LogBotResponse
-	public ResponseEntity<KakaoSkillResponseDTO> getKakaoBotResponse(
-		@ClientIP String ip,
-		@RequestBody(required = false) KakaoBotRequestDTO dto) {
+	public ResponseEntity<KakaoSkillResponseDTO> handleKakaoBot(@RequestBody KakaoBotRequestDTO dto) {
 		return ResponseEntity.ok(botService.getResponse(dto));
 	}
 

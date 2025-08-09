@@ -30,10 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class HolidayService {
 
-  @Value("${api.endpoint}")
+  @Value("${api.holiday.endpoint}")
 	private String endpoint;
 
-	@Value("${api.serviceKey}")
+	@Value("${api.holiday.serviceKey}")
 	private String serviceKey;
 
 	private final ApiService api;
@@ -109,7 +109,7 @@ public class HolidayService {
       for (var holiday : response.getData()) {
         if (holiday.getIsHoliday().equals("Y")) {
           LocalDate date = LocalDate.parse(holiday.getLocDate(), formatter);     // 날짜 문자열을 LocalDate로 변환
-          String dayOfWeekKor = DateUtil.getDayOfWeekToKor(date.getDayOfWeek()); // 요일을 한글로 변환
+          String dayOfWeekKor = DateUtil.dayOfWeekToKor(date.getDayOfWeek()); // 요일을 한글로 변환
           
           // 출력 예시: 2025년 06월 06일(금): 현충일
           text.append(String.format("%s(%s): %s\n",

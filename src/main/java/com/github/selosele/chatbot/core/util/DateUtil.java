@@ -65,7 +65,7 @@ public class DateUtil {
    * @param value 요일 값
    * @return 한글 요일 이름
    */
-  public static String getDayOfWeekToKor(DayOfWeek value) {
+  public static String dayOfWeekToKor(DayOfWeek value) {
     return switch (value) {
       case MONDAY 	 -> CustomDayOfWeek.MONDAY.getDayName();
       case TUESDAY 	 -> CustomDayOfWeek.TUESDAY.getDayName();
