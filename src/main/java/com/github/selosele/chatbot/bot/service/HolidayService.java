@@ -93,7 +93,7 @@ public class HolidayService {
 					LocalDate date = LocalDate.parse(holiday.getLocDate(), formatter); // 날짜 문자열을 LocalDate로 변환
 					String dayOfWeekKor = DateUtil.dayOfWeekToKor(date.getDayOfWeek()); // 요일을 한글로 변환
 
-					// 출력 예시: 2025년 06월 06일(금): 현충일
+					// 출력 예시: 2025년 06월 06일(금): 현충일 | 공공기관 휴무일
 					text.append(String.format("%s(%s): %s | %s\n",
 							DateUtil.getDateString("yyyyMMdd", "yyyy년 MM월 dd일", holiday.getLocDate()),
 							dayOfWeekKor,
