@@ -18,7 +18,16 @@ import lombok.ToString;
 @AllArgsConstructor
 public class BotRequestDTO {
 
+	/**
+	 * 사용자 입력
+	 * 예) "공휴일/2025/01"
+	 */
 	private String input;
+
+	/**
+	 * 카테고리
+	 * 예) 사용자 입력 "공휴일/2025/01"에서 "공휴일"이 추출됨
+	 */
 	private String category;
 
 	/**

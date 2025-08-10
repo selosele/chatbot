@@ -14,8 +14,16 @@ import lombok.ToString;
 @ToString
 public class BotResultDTO<T> {
 
+	/** 조회된 데이터 리스트 */
 	private List<T> data;
+
+	/**
+	 * 사용자 입력
+	 * 예) "공휴일/2025/01"
+	 */
 	private String input;
+
+	/** 결과 메시지 */
 	private String message;
 
 	public static <T> BotResultDTO<T> of(List<T> data, String input, String message) {
