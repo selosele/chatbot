@@ -26,7 +26,10 @@ public class HolidayDTO {
 	@AllArgsConstructor
 	public static class GetHolidayRequest extends ApiRequestDTO {
 
+		/** 연 */
 		private String solYear;
+
+		/** 월 */
 		private String solMonth;
 
 		public static GetHolidayRequest of(String serviceKey, String solYear, String solMonth, String numOfRows) {
@@ -47,8 +50,13 @@ public class HolidayDTO {
 	@ToString
 	public static class HolidayResult {
 
+		/** 명칭 */
 		private String dateName;
+
+		/** 공공기관 휴일여부 */
 		private String isHoliday;
+
+		/** 날짜 */
 		private String locDate;
 
 		public static HolidayResult of(JsonNode item) {
