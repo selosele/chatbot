@@ -14,50 +14,50 @@ import lombok.ToString;
  * 공휴일 DTO
  */
 public class HolidayDTO {
-  
-  /**
-   * 공휴일 조회 요청 DTO
-   */
-  @Getter
-  @Setter
-  @Builder
-  @ToString
-  @NoArgsConstructor
-  @AllArgsConstructor
-  public static class GetHolidayRequestDTO extends ApiRequestDTO {
 
-    private String solYear;
-    private String solMonth;
+	/**
+	 * 공휴일 조회 요청 DTO
+	 */
+	@Getter
+	@Setter
+	@Builder
+	@ToString
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class GetHolidayRequest extends ApiRequestDTO {
 
-    public static GetHolidayRequestDTO of(String serviceKey, String solYear, String solMonth, String numOfRows) {
-      var dto = new GetHolidayRequestDTO();
-      dto.setServiceKey(serviceKey);
-      dto.setSolYear(solYear);
-      dto.setSolMonth(solMonth);
-      dto.setNumOfRows(numOfRows);
-      return dto;
-    }
-  }
+		private String solYear;
+		private String solMonth;
 
-  /**
-   * 공휴일 조회 결과 DTO
-   */
-  @Getter
-  @Builder
-  @ToString
-  public static class HolidayResultDTO {
+		public static GetHolidayRequest of(String serviceKey, String solYear, String solMonth, String numOfRows) {
+			var dto = new GetHolidayRequest();
+			dto.setServiceKey(serviceKey);
+			dto.setSolYear(solYear);
+			dto.setSolMonth(solMonth);
+			dto.setNumOfRows(numOfRows);
+			return dto;
+		}
+	}
 
-    private String dateName;
-    private String isHoliday;
-    private String locDate;
+	/**
+	 * 공휴일 조회 결과 DTO
+	 */
+	@Getter
+	@Builder
+	@ToString
+	public static class HolidayResult {
 
-    public static HolidayResultDTO of(JsonNode item) {
-      return HolidayResultDTO.builder()
-        .dateName(item.path("dateName").asText(""))
-        .isHoliday(item.path("isHoliday").asText(""))
-        .locDate(item.path("locdate").asText(""))
-        .build();
-    }
-  }
+		private String dateName;
+		private String isHoliday;
+		private String locDate;
+
+		public static HolidayResult of(JsonNode item) {
+			return HolidayResult.builder()
+					.dateName(item.path("dateName").asText(""))
+					.isHoliday(item.path("isHoliday").asText(""))
+					.locDate(item.path("locdate").asText(""))
+					.build();
+		}
+	}
 
 }
