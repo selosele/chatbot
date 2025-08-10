@@ -13,6 +13,7 @@ import com.github.selosele.chatbot.core.api.service.ApiService;
 import com.github.selosele.chatbot.core.constant.DataType;
 import com.github.selosele.chatbot.core.constant.Message;
 import com.github.selosele.chatbot.core.model.dto.BotResultDTO;
+import com.github.selosele.chatbot.core.util.BotUtil;
 import com.github.selosele.chatbot.core.util.CommonUtil;
 import com.github.selosele.chatbot.core.util.DateUtil;
 import com.github.selosele.chatbot.core.util.XmlUtil;
@@ -41,7 +42,7 @@ public class HolidayService {
 	 * @return 공휴일 정보
 	 */
 	public BotResultDTO<HolidayDTO.HolidayResult> getResponse(String input) {
-		String[] parts = input.split("/");
+		String[] parts = BotUtil.getParts(input);
 
 		String validationMessage = validateInput(parts, input);
 		if (validationMessage != null) {

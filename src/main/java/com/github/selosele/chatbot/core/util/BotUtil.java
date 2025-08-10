@@ -9,6 +9,19 @@ import com.github.selosele.chatbot.core.model.dto.KakaoBotRequestDTO;
 public class BotUtil {
 
 	/**
+	 * 사용자 입력을 "/"로 분리하여 배열로 반환하는 메소드
+	 * 
+	 * @param input 사용자 입력
+	 * @return 분리된 문자열 배열
+	 */
+	public static String[] getParts(String input) {
+		if (CommonUtil.isBlank(input)) {
+			return new String[0];
+		}
+		return input.split("/");
+	}
+
+	/**
 	 * 입력 객체에서 사용자 입력을 추출하는 메소드
 	 * 
 	 * @param arg 입력 객체
@@ -47,7 +60,7 @@ public class BotUtil {
 		if (CommonUtil.isBlank(input)) {
 			return null;
 		}
-		String[] parts = input.split("/");
+		String[] parts = getParts(input);
 		return parts.length > 0 ? parts[0].trim() : null;
 	}
 
