@@ -40,14 +40,14 @@ public class KakaoSkillResponseDTO {
 
 	public static KakaoSkillResponseDTO of(String text) {
 		return KakaoSkillResponseDTO.builder()
-			.template(Template.builder()
-				.outputs(List.of(Output.builder()
-					.simpleText(SimpleText.builder()
-						.text(text)
+				.template(Template.builder()
+						.outputs(List.of(Output.builder()
+								.simpleText(SimpleText.builder()
+										.text(text)
+										.build())
+								.build()))
 						.build())
-					.build()))
-				.build())
-			.build();
+				.build();
 	}
 
 }

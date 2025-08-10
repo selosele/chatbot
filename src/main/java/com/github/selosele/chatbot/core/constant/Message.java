@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 봇의 응답 메시지를 정의하는 Enum 클래스
+ * 봇의 응답 메시지를 정의하는 Enum
  */
 @Getter
 @RequiredArgsConstructor

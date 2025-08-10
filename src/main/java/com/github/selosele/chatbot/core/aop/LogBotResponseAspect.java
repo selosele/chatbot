@@ -13,35 +13,34 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 봇 응답을 로깅하는 AOP 클래스
+ * 봇 응답을 로깅하는 AOP
  */
 @Slf4j
 @Aspect
 @Component
 public class LogBotResponseAspect {
-  
-  /**
-   * 봇 응답을 로깅하는 메소드
-   * @param joinPoint AOP JoinPoint
-   * @param response 봇의 응답
-   */
-  @AfterReturning(
-    pointcut = "@annotation(com.github.selosele.chatbot.core.annotation.LogBotResponse)",
-    returning = "response"
-  )
-  public void logBotResponse(JoinPoint joinPoint, Object response) {
-    if (!(response instanceof ResponseEntity)) return;
 
-    Object[] args = joinPoint.getArgs();
-    HttpServletRequest request = CommonUtil.getRequest();
-    String clientIp = CommonUtil.getClientIP(request);
-    String input = null;
+	/**
+	 * 봇 응답을 로깅하는 메소드
+	 * 
+	 * @param joinPoint AOP JoinPoint
+	 * @param response  봇의 응답
+	 */
+	@AfterReturning(pointcut = "@annotation(com.github.selosele.chatbot.core.annotation.LogBotResponse)", returning = "response")
+	public void logBotResponse(JoinPoint joinPoint, Object response) {
+		if (!(response instanceof ResponseEntity))
+			return;
 
-    for (Object arg : args) {
-      input = BotUtil.extractInput(arg);
-    }
+		Object[] args = joinPoint.getArgs();
+		HttpServletRequest request = CommonUtil.getRequest();
+		String clientIp = CommonUtil.getClientIP(request);
+		String input = null;
 
-    log.info("Client IP: {}, Input: {}, Bot Response: {}", clientIp, input, response.toString());
-  }
+		for (Object arg : args) {
+			input = BotUtil.extractInput(arg);
+		}
+
+		log.info("Client IP: {}, Input: {}, Bot Response: {}", clientIp, input, response.toString());
+	}
 
 }

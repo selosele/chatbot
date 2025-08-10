@@ -22,6 +22,7 @@ public class BotService {
 
 	/**
 	 * 봇의 응답을 처리하는 메소드
+	 * 
 	 * @param input 사용자 입력
 	 * @return 봇의 응답
 	 */
@@ -31,10 +32,11 @@ public class BotService {
 		if (category.equals(Category.HOLIDAY.getName())) {
 			BotResultDTO<HolidayResultDTO> response = holidayService.getResponse(dto.getInput());
 			return BotResponseDTO.of(holidayService.responseToString(response));
-		}
-		else if (category.equals(Category.BUS.getName()))    return BotResponseDTO.of("버스 API는 준비 중입니다.");
-		else if (category.equals(Category.SUBWAY.getName())) return BotResponseDTO.of("지하철 API는 준비 중입니다.");
-		
+		} else if (category.equals(Category.BUS.getName()))
+			return BotResponseDTO.of("버스 API는 준비 중입니다.");
+		else if (category.equals(Category.SUBWAY.getName()))
+			return BotResponseDTO.of("지하철 API는 준비 중입니다.");
+
 		return BotResponseDTO.of(Message.UNSUPPORTED_COMMAND.getMessage());
 	}
 

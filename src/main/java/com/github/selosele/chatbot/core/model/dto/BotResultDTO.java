@@ -20,10 +20,10 @@ public class BotResultDTO<T> {
 
 	public static <T> BotResultDTO<T> of(List<T> data, String input, String message) {
 		return BotResultDTO.<T>builder()
-			.data(data)
-			.input(input)
-			.message(message)
-			.build();
+				.data(data)
+				.input(input)
+				.message(message)
+				.build();
 	}
-	
+
 }

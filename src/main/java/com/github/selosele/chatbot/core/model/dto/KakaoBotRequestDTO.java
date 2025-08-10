@@ -71,5 +71,5 @@ public class KakaoBotRequestDTO {
 		private String value;
 		private String groupName;
 	}
-	
+
 }

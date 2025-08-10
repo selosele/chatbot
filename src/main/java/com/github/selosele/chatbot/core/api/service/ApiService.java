@@ -33,6 +33,7 @@ public class ApiService {
 
 	/**
 	 * HTTP 요청을 처리하는 메소드
+	 * 
 	 * @param endpoint
 	 * @param data
 	 * @param method
@@ -51,6 +52,7 @@ public class ApiService {
 
 	/**
 	 * GET 요청을 처리하는 메소드
+	 * 
 	 * @param endpoint
 	 * @param data
 	 * @param returnType
@@ -62,15 +64,18 @@ public class ApiService {
 
 		try {
 			StringBuilder urlBuilder = new StringBuilder(endpoint);
-			Map<String, Object> paramsToMap = objectMapper.convertValue(params, new TypeReference<Map<String, Object>>() {});
+			Map<String, Object> paramsToMap = objectMapper.convertValue(params,
+					new TypeReference<Map<String, Object>>() {
+					});
 			if (!paramsToMap.isEmpty()) {
 				urlBuilder.append("?");
 				boolean first = true;
 				for (Map.Entry<String, Object> entry : paramsToMap.entrySet()) {
-					if (!first) urlBuilder.append("&");
+					if (!first)
+						urlBuilder.append("&");
 					urlBuilder.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8))
-						.append("=")
-						.append(URLEncoder.encode(entry.getValue().toString(), StandardCharsets.UTF_8));
+							.append("=")
+							.append(URLEncoder.encode(entry.getValue().toString(), StandardCharsets.UTF_8));
 					first = false;
 				}
 			}
@@ -82,7 +87,7 @@ public class ApiService {
 
 			int responseCode = conn.getResponseCode();
 			rd = new BufferedReader(new InputStreamReader(
-				responseCode >= 200 && responseCode <= 299 ? conn.getInputStream() : conn.getErrorStream()));
+					responseCode >= 200 && responseCode <= 299 ? conn.getInputStream() : conn.getErrorStream()));
 
 			StringBuilder sb = new StringBuilder();
 			String line;
@@ -91,22 +96,26 @@ public class ApiService {
 			}
 
 			if (returnType.equalsIgnoreCase(DataType.XML.getName())) {
-				Map<String, Object> map = xmlMapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>() {});
+				Map<String, Object> map = xmlMapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>() {
+				});
 				return objectMapper.writeValueAsString(map);
 			} else if (returnType.equalsIgnoreCase(DataType.JSON.getName())) {
 
 			}
 
 			return sb.toString();
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			String message = HttpMethod.GET.name() + Message.REQUEST_ERROR.getMessage();
 			log.error(message, ex);
 			throw new RuntimeException(message, ex);
-		}
-		finally {
-			try { if (rd != null) rd.close(); } catch (IOException ignored) {}
-			if (conn != null) conn.disconnect();
+		} finally {
+			try {
+				if (rd != null)
+					rd.close();
+			} catch (IOException ignored) {
+			}
+			if (conn != null)
+				conn.disconnect();
 		}
 	}
 

@@ -11,8 +11,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ApiRequestDTO {
-  
-  private String serviceKey;
-  private String numOfRows;
-  
+
+	private String serviceKey;
+	private String numOfRows;
+
 }

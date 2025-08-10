@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 데이터 타입을 정의하는 Enum 클래스
+ * 데이터 타입을 정의하는 Enum
  */
 @Getter
 @RequiredArgsConstructor

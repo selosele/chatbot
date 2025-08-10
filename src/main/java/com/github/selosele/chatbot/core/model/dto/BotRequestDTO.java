@@ -28,9 +28,9 @@ public class BotRequestDTO {
 
 	public static BotRequestDTO of(KakaoBotRequestDTO kakaoBotRequest) {
 		return BotRequestDTO.builder()
-			.input(kakaoBotRequest.getUserRequest().getUtterance())
-			.kakaoBotRequest(kakaoBotRequest)
-			.build();
+				.input(kakaoBotRequest.getUserRequest().getUtterance())
+				.kakaoBotRequest(kakaoBotRequest)
+				.build();
 	}
-	
+
 }

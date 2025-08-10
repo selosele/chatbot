@@ -17,7 +17,7 @@ import com.github.selosele.chatbot.core.resolver.ClientIPArgumentResolver;
 
 @Configuration
 @PropertySources({
-	@PropertySource("classpath:/env.properties")
+		@PropertySource("classpath:/env.properties")
 })
 public class AppConfig implements WebMvcConfigurer {
 

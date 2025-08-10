@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class HolidayService {
 
-  @Value("${api.holiday.endpoint}")
+	@Value("${api.holiday.endpoint}")
 	private String endpoint;
 
 	@Value("${api.holiday.serviceKey}")
@@ -37,14 +37,15 @@ public class HolidayService {
 	private final ApiService api;
 	private final ObjectMapper objectMapper;
 
-  /**
+	/**
 	 * 공휴일 정보를 조회하는 메소드
+	 * 
 	 * @param input 사용자 입력 ("공휴일" or "공휴일/yyyy" or "공휴일/yyyy/MM" 형식)
 	 * @return 공휴일 정보
 	 */
 	public BotResultDTO<HolidayResultDTO> getResponse(String input) {
 		String[] parts = input.split("/");
-		
+
 		// 1. "공휴일/yyyy" 형식
 		if (parts.length == 2 && !DateUtil.isValidDate(parts[1], "yyyy")) {
 			String message = "날짜 형식이 올바르지 않습니다. '공휴일/연도(4자리)' 형식으로 입력해주세요.";
@@ -61,7 +62,7 @@ public class HolidayService {
 
 		var year = parts.length == 1 ? DateUtil.getCurrentYear() : parts[1];
 		var month = parts.length == 3 ? parts[2] : "";
-		var params = GetHolidayRequestDTO.of(serviceKey, year, month, "100");
+		var params = GetHolidayRequestDTO.of(serviceKey, year, month, "365");
 		String response = api.request(endpoint, params, HttpMethod.GET.name(), DataType.XML.getName());
 
 		try {
@@ -78,48 +79,48 @@ public class HolidayService {
 			JsonNode items = body.path("items").path("item");
 
 			return BotResultDTO.<HolidayResultDTO>of(
-				parseHolidayItems(items),
-				input,
-				totalCountValue.equals("0") ? Message.FOUND_NO_HOLIDAY_DATA.getMessage() : totalCountValue + Message.FOUND_DATA_COUNT.getMessage()
-			);
-		}
-		catch (Exception ex) {
+					parseHolidayItems(items),
+					input,
+					totalCountValue.equals("0") ? Message.FOUND_NO_HOLIDAY_DATA.getMessage()
+							: totalCountValue + Message.FOUND_DATA_COUNT.getMessage());
+		} catch (Exception ex) {
 			log.error("API 응답 처리 중 오류 발생: {}", ex.getMessage());
 			return BotResultDTO.<HolidayResultDTO>of(null, input, Message.BOT_RESPONSE_ERROR.getMessage());
 		}
 	}
 
-  /**
-   * 공휴일 정보를 문자열로 변환하는 메소드
-   * @param response 공휴일 정보 응답
-   * @return 공휴일 정보를 문자열로 변환한 결과
-   */
-  public String responseToString(BotResultDTO<HolidayResultDTO> response) {
-    StringBuilder text = new StringBuilder();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+	/**
+	 * 공휴일 정보를 문자열로 변환하는 메소드
+	 * 
+	 * @param response 공휴일 정보 응답
+	 * @return 공휴일 정보를 문자열로 변환한 결과
+	 */
+	public String responseToString(BotResultDTO<HolidayResultDTO> response) {
+		StringBuilder text = new StringBuilder();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-    if (CommonUtil.isNotEmpty(response.getData())) {
-      for (var holiday : response.getData()) {
-        if (holiday.getIsHoliday().equals("Y")) {
-          LocalDate date = LocalDate.parse(holiday.getLocDate(), formatter);     // 날짜 문자열을 LocalDate로 변환
-          String dayOfWeekKor = DateUtil.dayOfWeekToKor(date.getDayOfWeek());    // 요일을 한글로 변환
-          
-          // 출력 예시: 2025년 06월 06일(금): 현충일
-          text.append(String.format("%s(%s): %s\n",
-						DateUtil.getDateString("yyyyMMdd", "yyyy년 MM월 dd일", holiday.getLocDate()),
-						dayOfWeekKor,
-						holiday.getDateName())
-					);
-        }
-      }
-    } else {
-      text.append(response.getMessage());
-    }
-    return text.toString();
-  }
+		if (CommonUtil.isNotEmpty(response.getData())) {
+			for (var holiday : response.getData()) {
+				if (holiday.getIsHoliday().equals("Y")) {
+					LocalDate date = LocalDate.parse(holiday.getLocDate(), formatter); // 날짜 문자열을 LocalDate로 변환
+					String dayOfWeekKor = DateUtil.dayOfWeekToKor(date.getDayOfWeek()); // 요일을 한글로 변환
+
+					// 출력 예시: 2025년 06월 06일(금): 현충일
+					text.append(String.format("%s(%s): %s\n",
+							DateUtil.getDateString("yyyyMMdd", "yyyy년 MM월 dd일", holiday.getLocDate()),
+							dayOfWeekKor,
+							holiday.getDateName()));
+				}
+			}
+		} else {
+			text.append(response.getMessage());
+		}
+		return text.toString();
+	}
 
 	/**
 	 * 공휴일 정보를 파싱하는 메소드
+	 * 
 	 * @param items JSON 노드
 	 * @return 공휴일 정보 리스트
 	 */
@@ -129,11 +130,11 @@ public class HolidayService {
 		// items가 배열인지 객체인지 확인
 		if (items.isArray()) {
 			for (JsonNode item : items) {
-				if (item.isMissingNode() || item.isEmpty()) continue;
+				if (item.isMissingNode() || item.isEmpty())
+					continue;
 				list.add(HolidayResultDTO.of(item));
 			}
-		}
-		else if (items.isObject()) {
+		} else if (items.isObject()) {
 			JsonNode item = items;
 			if (!item.isMissingNode() && !item.isEmpty()) {
 				list.add(HolidayResultDTO.of(item));
@@ -141,5 +142,5 @@ public class HolidayService {
 		}
 		return list;
 	}
-  
+
 }
