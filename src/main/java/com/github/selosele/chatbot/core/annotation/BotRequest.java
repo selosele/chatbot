@@ -6,11 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 봇의 응답을 로깅하기 위한 어노테이션
- * 이 어노테이션이 붙은 메소드는 봇의 응답을 로그로 기록한다.
+ * 봇 요청 DTO에 적용되는 어노테이션
+ * 이 어노테이션은 봇 요청 DTO의 필드에 적용되어, 해당 필드가 봇 요청의 일부임을 나타낸다.
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LogBotResponse {
+public @interface BotRequest {
 
 }

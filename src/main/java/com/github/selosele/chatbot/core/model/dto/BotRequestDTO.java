@@ -1,5 +1,7 @@
 package com.github.selosele.chatbot.core.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.github.selosele.chatbot.core.annotation.BotRequest;
 import com.github.selosele.chatbot.core.util.BotUtil;
 import com.github.selosele.chatbot.core.util.CommonUtil;
 
@@ -19,6 +21,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BotRequestDTO {
 
 	/**
@@ -33,9 +36,12 @@ public class BotRequestDTO {
 	 */
 	private String category;
 
+	private String botType;
+
 	/**
 	 * 카카오톡 봇의 요청 DTO
 	 */
+	@BotRequest
 	private KakaoBotRequestDTO kakaoBotRequest;
 
 	public static BotRequestDTO of(Object dto) {

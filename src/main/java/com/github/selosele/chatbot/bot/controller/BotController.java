@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.selosele.chatbot.bot.service.BotService;
-import com.github.selosele.chatbot.core.annotation.LogBotResponse;
+import com.github.selosele.chatbot.core.annotation.BotHandler;
 import com.github.selosele.chatbot.core.model.dto.BotRequestDTO;
 import com.github.selosele.chatbot.core.model.dto.KakaoBotRequestDTO;
 import com.github.selosele.chatbot.core.model.dto.KakaoSkillResponseDTO;
@@ -26,7 +26,7 @@ public class BotController {
 	 * @return 카카오톡 봇의 응답
 	 */
 	@PostMapping("/")
-	@LogBotResponse
+	@BotHandler
 	public ResponseEntity<KakaoSkillResponseDTO> handleKakaoBot(@RequestBody KakaoBotRequestDTO dto) {
 		return ResponseEntity.ok(botService.getResponse(BotRequestDTO.of(dto)).getKakaoSkillResponse());
 	}
