@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import com.github.selosele.chatbot.core.constant.Message;
 import com.github.selosele.chatbot.core.model.dto.BotRequestDTO;
 import com.github.selosele.chatbot.core.model.dto.BotResponseDTO;
-import com.github.selosele.chatbot.core.util.BotUtil;
 import com.github.selosele.chatbot.core.util.CommonUtil;
 
 import lombok.extern.slf4j.Slf4j;
