@@ -118,13 +118,13 @@ public class HolidayService {
 
 		// items가 배열인지 객체인지 확인
 		if (items.isArray()) {
-			for (JsonNode item : items) {
+			for (var item : items) {
 				if (item.isMissingNode() || item.isEmpty())
 					continue;
 				list.add(HolidayDTO.HolidayResult.of(item));
 			}
 		} else if (items.isObject()) {
-			JsonNode item = items;
+			var item = items;
 			if (!item.isMissingNode() && !item.isEmpty()) {
 				list.add(HolidayDTO.HolidayResult.of(item));
 			}
