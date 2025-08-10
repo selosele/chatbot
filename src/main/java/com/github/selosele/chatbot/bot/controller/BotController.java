@@ -22,6 +22,7 @@ public class BotController {
 	/**
 	 * 카카오톡 봇의 응답을 처리하는 엔드포인트
 	 * 
+	 * @param dto 카카오톡 봇의 요청 객체
 	 * @return 카카오톡 봇의 응답
 	 */
 	@PostMapping("/")

@@ -36,12 +36,12 @@ public class ValidateBotRequestAspect {
 
 		BotRequestDTO dto = (BotRequestDTO) args[0];
 		String input = dto.getInput();
-		if (!BotUtil.isValidInput(input)) {
+		if (!dto.isValidInput(input)) {
 			log.error(Message.IS_INPUT_BLANK.getMessage());
 			return BotResponseDTO.of(Message.IS_INPUT_BLANK.getMessage());
 		}
 
-		String category = BotUtil.extractCategory(input);
+		String category = dto.extractCategory(input);
 		if (CommonUtil.isBlank(category)) {
 			log.error(Message.UNSUPPORTED_COMMAND.getMessage());
 			return BotResponseDTO.of(Message.UNSUPPORTED_COMMAND.getMessage());

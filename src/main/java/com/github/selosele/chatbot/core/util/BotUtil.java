@@ -50,28 +50,4 @@ public class BotUtil {
 		return null;
 	}
 
-	/**
-	 * 입력 문자열에서 카테고리를 추출하는 메소드
-	 * 
-	 * @param input 사용자 입력
-	 * @return 카테고리 문자열
-	 */
-	public static String extractCategory(String input) {
-		if (CommonUtil.isBlank(input)) {
-			return null;
-		}
-		String[] parts = getParts(input);
-		return parts.length > 0 ? parts[0].trim() : null;
-	}
-
-	/**
-	 * 입력 값이 유효한지 검사하는 메소드
-	 * 
-	 * @param input 사용자 입력
-	 * @return 유효성 검사 결과
-	 */
-	public static boolean isValidInput(String input) {
-		return CommonUtil.isNotBlank(input);
-	}
-
 }
