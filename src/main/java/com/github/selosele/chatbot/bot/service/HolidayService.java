@@ -2,14 +2,11 @@ package com.github.selosele.chatbot.bot.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.selosele.chatbot.bot.model.dto.HolidayDTO;
 import com.github.selosele.chatbot.core.api.service.ApiService;
@@ -18,6 +15,7 @@ import com.github.selosele.chatbot.core.constant.Message;
 import com.github.selosele.chatbot.core.model.dto.BotResultDTO;
 import com.github.selosele.chatbot.core.util.CommonUtil;
 import com.github.selosele.chatbot.core.util.DateUtil;
+import com.github.selosele.chatbot.core.util.XmlUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +65,7 @@ public class HolidayService {
 			var items = body.path("items").path("item");
 
 			return BotResultDTO.<HolidayDTO.HolidayResult>of(
-					parseHolidayItems(items),
+					XmlUtil.parseItems(items, HolidayDTO.HolidayResult::of),
 					input,
 					totalCountValue.equals("0") ? Message.FOUND_NO_HOLIDAY_DATA.getMessage()
 							: totalCountValue + Message.FOUND_DATA_COUNT.getMessage());
@@ -89,47 +87,20 @@ public class HolidayService {
 
 		if (CommonUtil.isNotEmpty(response.getData())) {
 			for (var holiday : response.getData()) {
-				if (holiday.getIsHoliday().equals("Y")) {
-					LocalDate date = LocalDate.parse(holiday.getLocDate(), formatter); // 날짜 문자열을 LocalDate로 변환
-					String dayOfWeekKor = DateUtil.dayOfWeekToKor(date.getDayOfWeek()); // 요일을 한글로 변환
+				LocalDate date = LocalDate.parse(holiday.getLocDate(), formatter); // 날짜 문자열을 LocalDate로 변환
+				String dayOfWeekKor = DateUtil.dayOfWeekToKor(date.getDayOfWeek()); // 요일을 한글로 변환
 
-					// 출력 예시: 2025년 06월 06일(금): 현충일 | 공공기관 휴무일
-					text.append(String.format("%s(%s): %s | %s\n",
-							DateUtil.getDateString("yyyyMMdd", "yyyy년 MM월 dd일", holiday.getLocDate()),
-							dayOfWeekKor,
-							holiday.getDateName(),
-							holiday.getIsHoliday().equals("Y") ? "공공기관 휴무일" : " "));
-				}
+				// 출력 예시: 2025년 06월 06일(금): 현충일 | 공공기관 휴무일
+				text.append(String.format("%s(%s): %s | %s\n",
+						DateUtil.getDateString("yyyyMMdd", "yyyy년 MM월 dd일", holiday.getLocDate()),
+						dayOfWeekKor,
+						holiday.getDateName(),
+						holiday.getIsHoliday().equals("Y") ? "공공기관 휴무일" : " "));
 			}
 		} else {
 			text.append(response.getMessage());
 		}
 		return text.toString();
-	}
-
-	/**
-	 * 공휴일 정보를 파싱하는 메소드
-	 * 
-	 * @param items JSON 노드
-	 * @return 공휴일 정보 리스트
-	 */
-	private List<HolidayDTO.HolidayResult> parseHolidayItems(JsonNode items) {
-		List<HolidayDTO.HolidayResult> list = new ArrayList<>();
-
-		// items가 배열인지 객체인지 확인
-		if (items.isArray()) {
-			for (var item : items) {
-				if (item.isMissingNode() || item.isEmpty())
-					continue;
-				list.add(HolidayDTO.HolidayResult.of(item));
-			}
-		} else if (items.isObject()) {
-			var item = items;
-			if (!item.isMissingNode() && !item.isEmpty()) {
-				list.add(HolidayDTO.HolidayResult.of(item));
-			}
-		}
-		return list;
 	}
 
 	/**
