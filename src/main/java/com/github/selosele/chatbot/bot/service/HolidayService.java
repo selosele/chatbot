@@ -45,37 +45,26 @@ public class HolidayService {
 	public BotResultDTO<HolidayDTO.HolidayResult> getResponse(String input) {
 		String[] parts = input.split("/");
 
-		// 1. "공휴일/yyyy" 형식
-		if (parts.length == 2 && !DateUtil.isValidDate(parts[1], "yyyy")) {
-			String message = "날짜 형식이 올바르지 않습니다. '공휴일/연도(4자리)' 형식으로 입력해주세요.";
-			log.error(message);
-			return BotResultDTO.<HolidayDTO.HolidayResult>of(null, input, message);
+		String validationMessage = validateInput(parts, input);
+		if (validationMessage != null) {
+			log.error(validationMessage);
+			return BotResultDTO.<HolidayDTO.HolidayResult>of(null, input, validationMessage);
 		}
 
-		// 2. "공휴일/yyyy/MM" 형식
-		if (parts.length == 3 && (!DateUtil.isValidDate(parts[1], "yyyy") || !DateUtil.isValidDate(parts[2], "MM"))) {
-			String message = "날짜 형식이 올바르지 않습니다. '공휴일/연도(4자리)/월(2자리)' 형식으로 입력해주세요.";
-			log.error(message);
-			return BotResultDTO.<HolidayDTO.HolidayResult>of(null, input, message);
-		}
-
-		var year = parts.length == 1 ? DateUtil.getCurrentYear() : parts[1];
-		var month = parts.length == 3 ? parts[2] : "";
-		var params = HolidayDTO.GetHolidayRequest.of(serviceKey, year, month, "365");
-		String response = api.request(endpoint, params, HttpMethod.GET.name(), DataType.XML.getName());
+		String response = api.request(endpoint, createParams(parts), HttpMethod.GET.name(), DataType.XML.getName());
 
 		try {
-			JsonNode rootNode = objectMapper.readTree(response);
-			JsonNode resultCode = rootNode.path("header").path("resultCode");
+			var rootNode = objectMapper.readTree(response);
+			var resultCode = rootNode.path("header").path("resultCode");
 			if (!resultCode.asText().equals("00")) {
 				log.error("API 호출 실패: {}", resultCode.asText());
 				return BotResultDTO.<HolidayDTO.HolidayResult>of(null, input, Message.BOT_RESPONSE_ERROR.getMessage());
 			}
 
-			JsonNode body = rootNode.path("body");
-			JsonNode totalCount = body.path("totalCount");
-			String totalCountValue = totalCount.asText("0");
-			JsonNode items = body.path("items").path("item");
+			var body = rootNode.path("body");
+			var totalCount = body.path("totalCount");
+			var totalCountValue = totalCount.asText("0");
+			var items = body.path("items").path("item");
 
 			return BotResultDTO.<HolidayDTO.HolidayResult>of(
 					parseHolidayItems(items),
@@ -105,10 +94,11 @@ public class HolidayService {
 					String dayOfWeekKor = DateUtil.dayOfWeekToKor(date.getDayOfWeek()); // 요일을 한글로 변환
 
 					// 출력 예시: 2025년 06월 06일(금): 현충일
-					text.append(String.format("%s(%s): %s\n",
+					text.append(String.format("%s(%s): %s | %s\n",
 							DateUtil.getDateString("yyyyMMdd", "yyyy년 MM월 dd일", holiday.getLocDate()),
 							dayOfWeekKor,
-							holiday.getDateName()));
+							holiday.getDateName(),
+							holiday.getIsHoliday().equals("Y") ? "공공기관 휴무일" : " "));
 				}
 			}
 		} else {
@@ -140,6 +130,40 @@ public class HolidayService {
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * 입력된 공휴일 정보의 형식을 검증하는 메소드
+	 * 
+	 * @param parts 입력된 문자열을 "/"로 분리한 배열
+	 * @param input 원본 입력 문자열
+	 * @return 검증 메시지 또는 null
+	 */
+	private String validateInput(String[] parts, String input) {
+
+		// 1. "공휴일/yyyy" 형식
+		if (parts.length == 2 && !DateUtil.isValidDate(parts[1], "yyyy")) {
+			return "날짜 형식이 올바르지 않습니다. '공휴일/연도(4자리)' 형식으로 입력해주세요.";
+		}
+
+		// 2. "공휴일/yyyy/MM" 형식
+		if (parts.length == 3 && (!DateUtil.isValidDate(parts[1], "yyyy") || !DateUtil.isValidDate(parts[2], "MM"))) {
+			return "날짜 형식이 올바르지 않습니다. '공휴일/연도(4자리)/월(2자리)' 형식으로 입력해주세요.";
+		}
+
+		return null;
+	}
+
+	/**
+	 * API 요청에 필요한 파라미터를 생성하는 메소드
+	 * 
+	 * @param parts 입력된 문자열을 "/"로 분리한 배열
+	 * @return HolidayDTO.GetHolidayRequest 객체
+	 */
+	private HolidayDTO.GetHolidayRequest createParams(String[] parts) {
+		var year = parts.length == 1 ? DateUtil.getCurrentYear() : parts[1];
+		var month = parts.length == 3 ? parts[2] : "";
+		return HolidayDTO.GetHolidayRequest.of(serviceKey, year, month, "365");
 	}
 
 }
