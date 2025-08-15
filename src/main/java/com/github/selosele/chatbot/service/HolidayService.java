@@ -1,4 +1,4 @@
-package com.github.selosele.chatbot.bot.service;
+package com.github.selosele.chatbot.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -8,7 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.selosele.chatbot.bot.model.dto.HolidayDTO;
+import com.github.selosele.chatbot.model.dto.HolidayDTO;
 import com.github.selosele.chatbot.core.api.service.ApiService;
 import com.github.selosele.chatbot.core.constant.DataType;
 import com.github.selosele.chatbot.core.constant.Message;

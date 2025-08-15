@@ -1,4 +1,4 @@
-package com.github.selosele.chatbot.bot.model.dto;
+package com.github.selosele.chatbot.model.dto;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.selosele.chatbot.core.model.dto.ApiRequestDTO;

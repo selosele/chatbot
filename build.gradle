@@ -6,6 +6,7 @@ plugins {
 
 group = 'com.github.selosele'
 version = '0.0.1-SNAPSHOT'
+description = 'chatbot'
 
 java {
 	toolchain {
@@ -25,12 +26,12 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	// lombok 시작
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
-	// lombok 끝
+
+	implementation files('libs/chatbot-core-0.0.1-SNAPSHOT-plain.jar')
 }
 
 tasks.named('test') {

@@ -1,11 +1,11 @@
-package com.github.selosele.chatbot.bot.controller;
+package com.github.selosele.chatbot.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.selosele.chatbot.bot.service.BotService;
+import com.github.selosele.chatbot.service.BotService;
 import com.github.selosele.chatbot.core.annotation.BotHandler;
 import com.github.selosele.chatbot.core.model.dto.BotRequestDTO;
 import com.github.selosele.chatbot.core.model.dto.KakaoBotRequestDTO;

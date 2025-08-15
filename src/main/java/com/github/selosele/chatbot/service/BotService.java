@@ -1,8 +1,8 @@
-package com.github.selosele.chatbot.bot.service;
+package com.github.selosele.chatbot.service;
 
 import org.springframework.stereotype.Service;
 
-import com.github.selosele.chatbot.bot.model.dto.HolidayDTO;
+import com.github.selosele.chatbot.model.dto.HolidayDTO;
 import com.github.selosele.chatbot.core.annotation.ValidateBotRequest;
 import com.github.selosele.chatbot.core.constant.Category;
 import com.github.selosele.chatbot.core.constant.Message;
