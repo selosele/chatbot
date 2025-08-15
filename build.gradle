@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.github.selosele'
-version = '0.0.1-SNAPSHOT'
+version = '1.0'
 description = 'chatbot'
 
 java {
@@ -31,7 +31,7 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 
-	implementation files('libs/chatbot-core-0.0.1-SNAPSHOT-plain.jar')
+	implementation files('libs/chatbot-core-1.0-plain.jar')
 }
 
 tasks.named('test') {
