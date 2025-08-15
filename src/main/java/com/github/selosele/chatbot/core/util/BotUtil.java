@@ -1,5 +1,6 @@
 package com.github.selosele.chatbot.core.util;
 
+import com.github.selosele.chatbot.core.constant.Separator;
 import com.github.selosele.chatbot.core.model.dto.BotRequestDTO;
 import com.github.selosele.chatbot.core.model.dto.KakaoBotRequestDTO;
 
@@ -9,7 +10,7 @@ import com.github.selosele.chatbot.core.model.dto.KakaoBotRequestDTO;
 public class BotUtil {
 
 	/**
-	 * 사용자 입력을 "/"로 분리하여 배열로 반환하는 메소드
+	 * 사용자 입력을 구분자로 분리하여 배열로 반환하는 메소드
 	 * 
 	 * @param input 사용자 입력
 	 * @return 분리된 문자열 배열
@@ -18,7 +19,7 @@ public class BotUtil {
 		if (CommonUtil.isBlank(input)) {
 			return new String[0];
 		}
-		return input.split("/");
+		return input.split(Separator.SLASH.getName());
 	}
 
 	/**

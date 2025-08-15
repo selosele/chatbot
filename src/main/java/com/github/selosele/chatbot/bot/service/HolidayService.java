@@ -107,7 +107,7 @@ public class HolidayService {
 	/**
 	 * 입력된 공휴일 정보의 형식을 검증하는 메소드
 	 * 
-	 * @param parts 입력된 문자열을 "/"로 분리한 배열
+	 * @param parts 입력된 문자열을 구분자로 분리한 배열
 	 * @param input 원본 입력 문자열
 	 * @return 검증 메시지 또는 null
 	 */
@@ -129,7 +129,7 @@ public class HolidayService {
 	/**
 	 * API 요청에 필요한 파라미터를 생성하는 메소드
 	 * 
-	 * @param parts 입력된 문자열을 "/"로 분리한 배열
+	 * @param parts 입력된 문자열을 구분자로 분리한 배열
 	 * @return HolidayDTO.GetHolidayRequest 객체
 	 */
 	private HolidayDTO.GetHolidayRequest createParams(String[] parts) {
