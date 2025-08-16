@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.selosele.chatbot.model.dto.HolidayDTO;
-import com.github.selosele.chatbot.core.api.service.ApiService;
+import com.github.selosele.chatbot.core.http.service.HttpService;
 import com.github.selosele.chatbot.core.constant.DataType;
 import com.github.selosele.chatbot.core.constant.Message;
 import com.github.selosele.chatbot.core.model.dto.BotResultDTO;
@@ -32,7 +32,7 @@ public class HolidayService {
 	@Value("${api.holiday.serviceKey}")
 	private String serviceKey;
 
-	private final ApiService api;
+	private final HttpService http;
 	private final ObjectMapper objectMapper;
 
 	/**
@@ -50,13 +50,13 @@ public class HolidayService {
 			return BotResultDTO.<HolidayDTO.HolidayResult>of(null, input, validationMessage);
 		}
 
-		String response = api.request(endpoint, createParams(parts), HttpMethod.GET.name(), DataType.XML.getName());
+		String response = http.request(endpoint, createParams(parts), HttpMethod.GET.name(), DataType.XML.getName());
 
 		try {
 			var rootNode = objectMapper.readTree(response);
 			var resultCode = rootNode.path("header").path("resultCode");
 			if (!resultCode.asText().equals("00")) {
-				log.error("API 호출 실패: {}", resultCode.asText());
+				log.error("HTTP 요청 실패: {}", resultCode.asText());
 				return BotResultDTO.<HolidayDTO.HolidayResult>of(null, input, Message.BOT_RESPONSE_ERROR.getMessage());
 			}
 

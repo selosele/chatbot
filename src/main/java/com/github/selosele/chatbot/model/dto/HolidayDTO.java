@@ -1,7 +1,7 @@
 package com.github.selosele.chatbot.model.dto;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.selosele.chatbot.core.model.dto.ApiRequestDTO;
+import com.github.selosele.chatbot.core.model.dto.HttpRequestDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +24,7 @@ public class HolidayDTO {
 	@ToString
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class GetHolidayRequest extends ApiRequestDTO {
+	public static class GetHolidayRequest extends HttpRequestDTO {
 
 		/** 연 */
 		private String solYear;
