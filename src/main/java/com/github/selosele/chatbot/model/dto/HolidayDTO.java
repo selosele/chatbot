@@ -24,7 +24,7 @@ public class HolidayDTO {
 	@ToString
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class GetHolidayRequest extends HttpRequestDTO {
+	public static class Request extends HttpRequestDTO {
 
 		/** 연 */
 		private String solYear;
@@ -32,8 +32,8 @@ public class HolidayDTO {
 		/** 월 */
 		private String solMonth;
 
-		public static GetHolidayRequest of(String serviceKey, String solYear, String solMonth, String numOfRows) {
-			var dto = new GetHolidayRequest();
+		public static Request of(String serviceKey, String solYear, String solMonth, String numOfRows) {
+			var dto = new Request();
 			dto.setServiceKey(serviceKey);
 			dto.setSolYear(solYear);
 			dto.setSolMonth(solMonth);
@@ -43,12 +43,12 @@ public class HolidayDTO {
 	}
 
 	/**
-	 * 공휴일 조회 결과 DTO
+	 * 공휴일 응답 DTO
 	 */
 	@Getter
 	@Builder
 	@ToString
-	public static class HolidayResult {
+	public static class Response {
 
 		/** 명칭 */
 		private String dateName;
@@ -59,8 +59,8 @@ public class HolidayDTO {
 		/** 날짜 */
 		private String locDate;
 
-		public static HolidayResult of(JsonNode item) {
-			return HolidayResult.builder()
+		public static Response of(JsonNode item) {
+			return Response.builder()
 					.dateName(item.path("dateName").asText(""))
 					.isHoliday(item.path("isHoliday").asText(""))
 					.locDate(item.path("locdate").asText(""))

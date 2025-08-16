@@ -26,11 +26,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class HolidayService {
 
-	@Value("${api.holiday.endpoint}")
-	private String endpoint;
-
 	@Value("${api.holiday.serviceKey}")
 	private String serviceKey;
+
+	@Value("${api.holiday.endpoint}")
+	private String endpoint;
 
 	private final HttpService http;
 	private final ObjectMapper objectMapper;
@@ -41,13 +41,13 @@ public class HolidayService {
 	 * @param input 사용자 입력 ("공휴일" or "공휴일/yyyy" or "공휴일/yyyy/MM" 형식)
 	 * @return 공휴일 정보
 	 */
-	public BotResultDTO<HolidayDTO.HolidayResult> getResponse(String input) {
+	public BotResultDTO<HolidayDTO.Response> getResponse(String input) {
 		String[] parts = BotUtil.getParts(input);
 
 		String validationMessage = validateInput(parts, input);
 		if (validationMessage != null) {
 			log.error(validationMessage);
-			return BotResultDTO.<HolidayDTO.HolidayResult>of(null, input, validationMessage);
+			return BotResultDTO.<HolidayDTO.Response>of(null, input, validationMessage);
 		}
 
 		String response = http.request(endpoint, createParams(parts), HttpMethod.GET.name(), DataType.XML.getName());
@@ -57,7 +57,7 @@ public class HolidayService {
 			var resultCode = rootNode.path("header").path("resultCode");
 			if (!resultCode.asText().equals("00")) {
 				log.error("HTTP 요청 실패: {}", resultCode.asText());
-				return BotResultDTO.<HolidayDTO.HolidayResult>of(null, input, Message.BOT_RESPONSE_ERROR.getMessage());
+				return BotResultDTO.<HolidayDTO.Response>of(null, input, Message.BOT_RESPONSE_ERROR.getMessage());
 			}
 
 			var body = rootNode.path("body");
@@ -65,14 +65,14 @@ public class HolidayService {
 			var totalCountValue = totalCount.asText("0");
 			var items = body.path("items").path("item");
 
-			return BotResultDTO.<HolidayDTO.HolidayResult>of(
-					XmlUtil.parseItems(items, HolidayDTO.HolidayResult::of),
+			return BotResultDTO.<HolidayDTO.Response>of(
+					XmlUtil.parseItems(items, HolidayDTO.Response::of),
 					input,
 					totalCountValue.equals("0") ? Message.FOUND_NO_HOLIDAY_DATA.getMessage()
 							: totalCountValue + Message.FOUND_DATA_COUNT.getMessage());
 		} catch (Exception ex) {
 			log.error("API 응답 처리 중 오류 발생: {}", ex.getMessage());
-			return BotResultDTO.<HolidayDTO.HolidayResult>of(null, input, Message.BOT_RESPONSE_ERROR.getMessage());
+			return BotResultDTO.<HolidayDTO.Response>of(null, input, Message.BOT_RESPONSE_ERROR.getMessage());
 		}
 	}
 
@@ -82,14 +82,16 @@ public class HolidayService {
 	 * @param response 공휴일 정보 응답
 	 * @return 공휴일 정보를 문자열로 변환한 결과
 	 */
-	public String responseToString(BotResultDTO<HolidayDTO.HolidayResult> response) {
+	public String responseToString(BotResultDTO<HolidayDTO.Response> response) {
 		StringBuilder text = new StringBuilder();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
 		if (CommonUtil.isNotEmpty(response.getData())) {
 			for (var holiday : response.getData()) {
-				LocalDate date = LocalDate.parse(holiday.getLocDate(), formatter); // 날짜 문자열을 LocalDate로 변환
-				String dayOfWeekKor = DateUtil.dayOfWeekToKor(date.getDayOfWeek()); // 요일을 한글로 변환
+				// 날짜 문자열을 LocalDate로 변환
+				LocalDate date = LocalDate.parse(holiday.getLocDate(), formatter);
+				// 요일을 한글로 변환
+				String dayOfWeekKor = DateUtil.dayOfWeekToKor(date.getDayOfWeek());
 
 				// 출력 예시: 2025년 06월 06일(금): 현충일 | 공공기관 휴무일
 				text.append(String.format("%s(%s): %s | %s\n",
@@ -130,12 +132,12 @@ public class HolidayService {
 	 * API 요청에 필요한 파라미터를 생성하는 메소드
 	 * 
 	 * @param parts 입력된 문자열을 구분자로 분리한 배열
-	 * @return HolidayDTO.GetHolidayRequest 객체
+	 * @return HolidayDTO.Request 객체
 	 */
-	private HolidayDTO.GetHolidayRequest createParams(String[] parts) {
+	private HolidayDTO.Request createParams(String[] parts) {
 		var year = parts.length == 1 ? DateUtil.getCurrentYear() : parts[1];
 		var month = parts.length == 3 ? parts[2] : "";
-		return HolidayDTO.GetHolidayRequest.of(serviceKey, year, month, "365");
+		return HolidayDTO.Request.of(serviceKey, year, month, "365");
 	}
 
 }
