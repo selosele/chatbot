@@ -25,7 +25,7 @@ public class BotController {
 	 * @param dto 카카오톡 봇의 요청 객체
 	 * @return 카카오톡 봇의 응답
 	 */
-	@PostMapping("/")
+	@PostMapping("/handle-kakao-bot")
 	@BotHandler
 	public ResponseEntity<KakaoSkillResponseDTO> handleKakaoBot(@RequestBody KakaoBotRequestDTO dto) {
 		return ResponseEntity.ok(botService.getResponse(BotRequestDTO.of(dto)).getKakaoSkillResponse());
