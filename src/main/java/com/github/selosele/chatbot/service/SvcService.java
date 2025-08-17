@@ -38,7 +38,6 @@ public class SvcService {
             return null;
         }
 
-        // JSON 응답에서 액세스 토큰 추출
         try {
             LoginDTO.Response loginResponse = objectMapper.readValue(response, LoginDTO.Response.class);
             if (CommonUtil.isBlank(loginResponse.getAccessToken())) {
