@@ -2,8 +2,10 @@ package com.github.selosele.chatbot.model.dto;
 
 import com.github.selosele.chatbot.core.model.dto.HttpRequestDTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -41,16 +43,12 @@ public class LoginDTO {
     @Getter
     @Builder
     @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Response {
 
         /** 액세스 토큰 */
         private String accessToken;
-
-        public static Response of(String accessToken) {
-            return Response.builder()
-                    .accessToken(accessToken)
-                    .build();
-        }
     }
 
 }

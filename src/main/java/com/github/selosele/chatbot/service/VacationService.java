@@ -32,6 +32,9 @@ public class VacationService {
     @Value("${api.svc.user.id}")
     private String userId;
 
+    @Value("${api.svc.employee.id}")
+    private String employeeId;
+
     @Value("${api.svc.login.user.account}")
     private String userAccount;
 
@@ -49,14 +52,26 @@ public class VacationService {
      * @return 휴가 정보
      */
     public BotResultDTO<VacationDTO.Response> getResponse(String input) {
+        String response = "";
+        try {
+            // 1. 첫 번째 시도: 기존 토큰으로 휴가 정보 요청
+            response = getVacation(accessToken, userId, employeeId);
+        } catch (Exception ex1) {
+            // 2. 첫 번째 시도 실패 시: 토큰 문제일 가능성 확인 후 재로그인
+            log.error("휴가 정보 요청 실패 (1차): {}", ex1.getMessage());
 
-        // 액세스 토큰이 없거나 유효하지 않으면 로그인 진행
-        if (CommonUtil.isBlank(accessToken)) {
+            // 액세스 토큰이 없거나 유효하지 않으면 재로그인
             accessToken = svcService.login(LoginDTO.Request.of(userAccount, userPassword));
-        }
 
-        String response = http.request(endpoint, createParams(accessToken, userId), HttpMethod.GET.name(),
-                DataType.JSON.getName());
+            try {
+                // 3. 두 번째 시도: 재로그인 후 새 토큰으로 다시 요청
+                response = getVacation(accessToken, userId, employeeId);
+            } catch (Exception ex2) {
+                log.error("휴가 정보 요청 실패 (2차): {}", ex2.getMessage());
+                // 두 번째 시도까지 실패하면 에러 반환
+                return BotResultDTO.<VacationDTO.Response>of(null, input, "휴가 정보 조회에 실패했습니다. 다시 시도해 주세요.");
+            }
+        }
 
         try {
             VacationDTO.Response vacationResponse = objectMapper.readValue(response, VacationDTO.Response.class);
@@ -79,12 +94,12 @@ public class VacationService {
         if (CommonUtil.isNotEmpty(response.getData())) {
             for (var data : response.getData()) {
                 var countInfo = data.getCountInfo();
-                text.append("=====================================휴가 일수:=====================================\n")
-                        .append(String.format("Total: %s", countInfo.getVacationTotalCount() + "개")).append(", ")
-                        .append(String.format("사용: %s", countInfo.getVacationUseCount() + "개")).append(", ")
-                        .append(String.format("잔여: %s", countInfo.getVacationRemainCount() + "개"))
-                        .append("\n");
-                text.append("=====================================휴가 목록:=====================================\n");
+                text.append("휴가 일수:\n")
+                        .append(String.format("■ Total: %s", countInfo.getVacationTotalCount() + "개")).append(", ")
+                        .append(String.format("■ 사용: %s", countInfo.getVacationUseCount() + "개")).append(", ")
+                        .append(String.format("■ 잔여: %s", countInfo.getVacationRemainCount() + "개"))
+                        .append("\n\n");
+                text.append("휴가 목록:\n");
                 if (!data.getVacationList().isEmpty()) {
                     for (var vacation : data.getVacationList()) {
                         var startYmd = DateUtil.getDateString("yyyyMMdd", "yyyy년 MM월 dd일",
@@ -95,7 +110,7 @@ public class VacationService {
                         var status = vacation.getVacationStatusCodeName();
                         var content = vacation.getVacationContent();
                         text.append(
-                                String.format("%s ~ %s (%s일) | %s | %s | %s", startYmd, endYmd, useCount, type,
+                                String.format("■ %s ~ %s (%s일) | %s | %s | %s", startYmd, endYmd, useCount, type,
                                         status,
                                         content))
                                 .append("\n");
@@ -116,8 +131,20 @@ public class VacationService {
      * @param parts 입력된 문자열을 구분자로 분리한 배열
      * @return VacationDTO.Request 객체
      */
-    private VacationDTO.Request createParams(String accessToken, String userId) {
-        return VacationDTO.Request.of(accessToken, userId);
+    private VacationDTO.Request createParams(String accessToken, String userId, String employeeId) {
+        return VacationDTO.Request.of(accessToken, userId, employeeId);
+    }
+
+    /**
+     * 휴가 정보를 조회하는 메소드
+     * 
+     * @param accessToken 액세스 토큰
+     * @param userId      사용자 ID
+     * @return 휴가 정보 응답 문자열
+     */
+    private String getVacation(String accessToken, String userId, String employeeId) throws Exception {
+        return http.request(endpoint, createParams(accessToken, userId, employeeId), HttpMethod.GET.name(),
+                DataType.JSON.getName());
     }
 
 }
