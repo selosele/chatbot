@@ -25,10 +25,11 @@ public class VacationDTO {
 	@ToString
 	public static class Request extends HttpRequestDTO {
 
-		public static Request of(String accessToken, String userId) {
+		public static Request of(String accessToken, String userId, String employeeId) {
 			var dto = new Request();
 			dto.setAccessToken(accessToken);
 			dto.setUserId(Integer.parseInt(userId));
+			dto.setEmployeeId(Integer.parseInt(employeeId));
 			return dto;
 		}
 	}
